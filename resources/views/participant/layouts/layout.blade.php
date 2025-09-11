@@ -27,21 +27,19 @@
             <ul class="nav nav-pills flex-column sidebar-nav flex-grow-1">
                 <li class="sidebar-header">Mahasiswa</li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('participant') }}">
+                    <a class="nav-link {{ request()->routeIs('participant') ? 'active' : '' }}" href="{{ route('participant') }}">
                         <i class="bi bi-speedometer2"></i><span>Dashboard</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-pencil-square"></i><span>Mulai Tes</span></a>
+                    <a class="nav-link {{ request()->routeIs('participant.materi') ? 'active' : '' }}" href="{{ route('participant.materi') }}"><i class="bi bi-book-half"></i><span>Materi</span></a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-clock-history"></i><span>Riwayat Tes</span></a>
+                    <a class="nav-link {{ request()->routeIs('participant.simulasi') ? 'active' : '' }}" href="{{ route('participant.simulasi') }}"><i class="bi bi-pencil-square"></i><span>Simulasi</span></a>
                 </li>
-                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">
-                        <i class="bi bi-person-fill"></i><span>Profil Saya</span>
-                    </a>
-                </li>
+
             </ul>
         </aside>
 
@@ -51,9 +49,8 @@
             <header class="top-navbar d-flex align-items-center p-2">
                 <button class="btn btn-link text-dark fs-4" id="sidebar-toggle"><i class="bi bi-list"></i></button>
                 <div class="ms-auto">
-                    <div class="dropdown">
+                    <div class="dropdown me-3">
                         <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                            <img src="https://source.unsplash.com/40x40/?person,student" alt="" class="rounded-circle avatar me-2">
                             <span class="fw-semibold">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow">

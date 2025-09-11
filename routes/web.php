@@ -21,8 +21,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/hasiltes', 'hasiltes')->name('admin.hasiltes');
         });
 
-
-
     });
 });
 
@@ -33,6 +31,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
     Route::prefix('participant')->group(function () {
         Route::controller(ParticipantMainController::class)->group(function () {
             Route::get('/dashboard', 'index')->name('participant');
+            Route::get('/materi', 'materi')->name('participant.materi');
+            Route::get('/simulasi', 'simulasi')->name('participant.simulasi');
+            Route::get('/ujian', 'ujian')->name('participant.ujian');
+
+
+
         });
 
 
@@ -42,10 +46,10 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
 require __DIR__.'/auth.php';
