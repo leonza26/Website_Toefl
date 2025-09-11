@@ -24,7 +24,7 @@
                 <!-- Search and Filter -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                         <div class="input-group">
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="Cari berdasarkan nama atau email...">
                             <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
                         </div>
@@ -45,13 +45,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Contoh data user 1 (Admin) --}}
+                            @php $no = 1; @endphp
+                            
+                            @foreach($admins as $admin)
                             <tr>
-                                <td>1</td>
-                                <td>Leonza</td>
-                                <td>leonza@gmail.com</td>
-                                <td><span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Admin</span></td>
-                                <td>10 Sep 2025</td>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $admin->name }}</td>
+                                <td>{{ $admin->email }}</td>
+                                <td><span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Admin</td>
+                                <td>{{ \Carbon\Carbon::parse($admin->created_at)->format('d M Y') }}</td>
                                 <td class="text-center">
                                     <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
                                     <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
@@ -61,38 +63,26 @@
                                     </form>
                                 </td>
                             </tr>
-                            {{-- Contoh data user 2 (Participant) --}}
+                            @endforeach
+
+                            @foreach($users as $user)
                             <tr>
-                                <td>2</td>
-                                <td>Ibad</td>
-                                <td>ibad@gmail.com</td>
-                                <td><span class="badge bg-success-subtle text-success-emphasis rounded-pill">Participant</span></td>
-                                <td>11 Sep 2025</td>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td><span class="badge bg-success-subtle text-success-emphasis rounded-pill">user</td>
+                                <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d M Y') }}</td>
                                 <td class="text-center">
                                     <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                     <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
+                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
                                     </form>
                                 </td>
                             </tr>
-                             {{-- Contoh data user lainnya --}}
-                             <tr>
-                                <td>3</td>
-                                <td>Andini Putri</td>
-                                <td>andini@example.com</td>
-                                <td><span class="badge bg-success-subtle text-success-emphasis rounded-pill">Participant</span></td>
-                                <td>09 Sep 2025</td>
-                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                     <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
+                            @endforeach
+                            
                         </tbody>
                     </table>
                 </div>

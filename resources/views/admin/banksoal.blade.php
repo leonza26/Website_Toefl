@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm border-0">
-             <div class="card-header bg-white border-0 pt-3">
+            <div class="card-header bg-white border-0 pt-3">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-2 mb-md-0">
                         <h5 class="card-title fw-semibold mb-0">Daftar Bank Soal</h5>
@@ -21,10 +21,10 @@
                 </div>
             </div>
             <div class="card-body">
-                 <!-- Search and Filter -->
+                <!-- Search and Filter -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                         <div class="input-group">
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="Cari judul bank soal...">
                             <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
                         </div>
