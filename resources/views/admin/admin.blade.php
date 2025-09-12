@@ -12,7 +12,7 @@
                 <div class="fs-2 text-primary me-3"><i class="bi bi-people-fill"></i></div>
                 <div>
                     <h5 class="card-title fw-semibold mb-0">Mahasiswa</h5>
-                    <p class="fs-4 fw-semibold mb-0">1,250</p>
+                    <p class="fs-4 fw-semibold mb-0">{{ $mahasiswa }}</p>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
     <!-- Card Hasil Tes -->
     <div class="col-md-6 col-xl-3 mb-4">
         <div class="card shadow-sm border-0">
-             <div class="card-body d-flex align-items-center">
+            <div class="card-body d-flex align-items-center">
                 <div class="fs-2 text-info me-3"><i class="bi bi-file-earmark-check-fill"></i></div>
                 <div>
                     <h5 class="card-title fw-semibold mb-0">Hasil Tes</h5>
@@ -61,7 +61,7 @@
             <div class="card-header bg-white border-0 pt-3">
                 <h5 class="card-title fw-semibold mb-0">Aktivitas Terbaru</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body"> 
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -97,4 +97,3 @@
     </div>
 </div>
 @endsection
-
