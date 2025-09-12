@@ -14,7 +14,7 @@
                         <p class="text-muted small mb-0">Kelola kategori utama untuk bank soal.</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                        <a href="#" class="btn btn-primary">
+                        <a href="{{ route('admin.buatmateri') }}" class="btn btn-primary">
                             <i class="bi bi-plus-circle me-2"></i>Tambah Materi Baru
                         </a>
                     </div>
@@ -26,16 +26,16 @@
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Nama Materi</th>
-                                <th scope="col" class="text-center">Jumlah Bank Soal</th>
+                                <th scope="col">Jenis Bahasa</th>
+                                <th scope="col" class="text-center">Jenis Materi</th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Listening Comprehension</td>
-                                <td class="text-center">5</td>
+                                <td>Bahasa Inggris</td>
+                                <td class="text-center">Listening Comprehension</td>
                                 <td class="text-center">
                                     <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Bank Soal</a>
                                     <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>

@@ -17,7 +17,9 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/dashboard', 'admin')->name('admin');
             Route::get('/manage', 'manageuser')->name('admin.manage');
             Route::get('/materi', 'materi')->name('admin.materi');
+            Route::get('/buatMateri', 'buatmateri')->name('admin.buatmateri');
             Route::get('/banksoal', 'banksoal')->name('admin.banksoal');
+            Route::get('/buatsoal', 'soal')->name('admin.soal');
             Route::get('/hasiltes', 'hasiltes')->name('admin.hasiltes');
         });
 

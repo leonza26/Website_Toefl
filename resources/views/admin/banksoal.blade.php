@@ -14,7 +14,7 @@
                         <p class="text-muted small mb-0">Kelola kumpulan soal di setiap materi.</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                        <a href="#" class="btn btn-primary">
+                        <a href="{{ route('admin.soal') }}" class="btn btn-primary">
                             <i class="bi bi-plus-circle me-2"></i>Tambah Bank Soal Baru
                         </a>
                     </div>
@@ -44,8 +44,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Judul Bank Soal</th>
-                                <th scope="col">Materi</th>
+                                <th scope="col">Jenis Bahasa</th>
+                                <th scope="col">Jenis Soal</th>
                                 <th scope="col" class="text-center">Jumlah Soal</th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>

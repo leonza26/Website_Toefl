@@ -11,7 +11,9 @@ class AdminMainController extends Controller
     //
     public function admin()
     {
-        return view('admin.admin');
+        $mahasiswa = User::where('role', 1)-> count();
+
+        return view('admin.admin', compact('mahasiswa'));
     }
 
     public function manageuser()
@@ -27,9 +29,19 @@ class AdminMainController extends Controller
         return view('admin.materi');
     }
 
+    public function buatmateri()
+    {
+        return view('admin.manajemenMateri');
+    }
+
     public function banksoal()
     {
         return view('admin.banksoal');
+    }
+
+    public function soal()
+    {
+        return view('admin.soal');
     }
 
     public function hasiltes()

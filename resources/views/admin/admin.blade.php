@@ -12,7 +12,7 @@
                 <div class="fs-2 text-primary me-3"><i class="bi bi-people-fill"></i></div>
                 <div>
                     <h5 class="card-title fw-semibold mb-0">Mahasiswa</h5>
-                    <p class="fs-4 fw-semibold mb-0">1,250</p>
+                    <p class="fs-4 fw-semibold mb-0">{{ $mahasiswa }}</p>
                 </div>
             </div>
         </div>
