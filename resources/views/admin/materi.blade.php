@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6 mb-2 mb-md-0">
                         <h5 class="card-title fw-semibold mb-0">Daftar Materi</h5>
-                        <p class="text-muted small mb-0">Kelola kategori utama untuk bank soal.</p>
+                        <p class="text-muted small mb-0">Materi untuk belajar mahasiswa.</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
                         <a href="{{ route('admin.buatmateri') }}" class="btn btn-primary">
@@ -37,13 +37,7 @@
                                 <td>Bahasa Inggris</td>
                                 <td class="text-center">Listening Comprehension</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Bank Soal</a>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
                                 </td>
                             </tr>
                             <tr>
@@ -51,13 +45,7 @@
                                 <td>Structure and Written Expression</td>
                                 <td class="text-center">3</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Bank Soal</a>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
                                 </td>
                             </tr>
                             <tr>
@@ -65,13 +53,8 @@
                                 <td>Reading Comprehension</td>
                                 <td class="text-center">8</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Bank Soal</a>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
+
                                 </td>
                             </tr>
                         </tbody>

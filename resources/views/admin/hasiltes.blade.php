@@ -62,7 +62,11 @@
                                 <td class="text-center"><span class="badge bg-primary">580</span></td>
                                 <td>10 September 2025</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary" title="Lihat Detail"><i class="bi bi-eye-fill"></i> Lihat Detail</a>
+                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr>
@@ -72,7 +76,11 @@
                                 <td class="text-center"><span class="badge bg-success">610</span></td>
                                 <td>09 September 2025</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary" title="Lihat Detail"><i class="bi bi-eye-fill"></i> Lihat Detail</a>
+                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr>
@@ -82,7 +90,11 @@
                                 <td class="text-center"><span class="badge bg-warning text-dark">78/100</span></td>
                                 <td>08 September 2025</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary" title="Lihat Detail"><i class="bi bi-eye-fill"></i> Lihat Detail</a>
+                                      <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus materi ini? Menghapus materi akan menghapus semua bank soal di dalamnya.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>

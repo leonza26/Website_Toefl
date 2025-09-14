@@ -24,6 +24,8 @@ class AdminMainController extends Controller
         return view('admin.manage', compact('admins', 'users'));
     }
 
+
+    // materi
     public function materi()
     {
         return view('admin.materi');
@@ -34,16 +36,47 @@ class AdminMainController extends Controller
         return view('admin.manajemenMateri');
     }
 
+
+    // bank soal
     public function banksoal()
     {
-        return view('admin.banksoal');
+        return view('admin.BankSoal.banksoal');
     }
 
-    public function soal()
+    public function tambah_banksoal()
     {
-        return view('admin.soal');
+        return view('admin.BankSoal.tambah_banksoal');
     }
 
+    public function kelola_banksoal()
+    {
+        return view('admin.BankSoal.kelolasoal');
+    }
+
+    public function lihatsoal(){
+        return view('admin.BankSoal.lihatsoal');
+    }
+
+    public function buatsoal(){
+        return view('admin.BankSoal.buatsoal');
+    }
+
+    public function editsoal(){
+        return view('admin.BankSoal.editsoal');
+    }
+
+
+    // setting ujian
+
+    public function sesiujian(){
+        return view('admin.Ujian.sesiujian');
+    }
+
+    public function eventujian(){
+        return view('admin.Ujian.eventujian');
+    }
+
+    // hasil tes
     public function hasiltes()
     {
         return view('admin.hasiltes');

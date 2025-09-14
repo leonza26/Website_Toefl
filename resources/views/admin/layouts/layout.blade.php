@@ -47,6 +47,20 @@
                 <a class="nav-link {{ request()->routeIs('admin.banksoal') ? 'active' : '' }}" href="{{ route('admin.banksoal') }}"><i class="bi bi-bank"></i><span>Bank Soal</span></a>
             </li>
 
+            {{-- sesi ujian --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.sesiujian') ? 'active' : '' }}" href="{{ route('admin.sesiujian') }}">
+                    <i class="bi bi-calendar-plus-fill"></i><span>Sesi Ujian</span>
+                </a>
+            </li>
+
+            {{-- event ujian --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.eventujian') ? 'active' : '' }}" href="{{ route('admin.eventujian') }}">
+                    <i class="bi bi-calendar-event-fill"></i><span>Event Ujian</span>
+                </a>
+            </li>
+
             {{-- hasil tes --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.hasiltes') ? 'active' : '' }}" href="{{ route('admin.hasiltes') }}"><i class="bi bi-bar-chart-line-fill"></i><span>Hasil Tes</span></a>
@@ -66,7 +80,7 @@
                         <span class="fw-semibold">{{ Auth::user()->name }} (Admin)</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
+                        <li><a class="dropdown-item" href="#">Profil</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

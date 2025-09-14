@@ -14,7 +14,7 @@
                         <p class="text-muted small mb-0">Kelola kumpulan soal di setiap materi.</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                        <a href="{{ route('admin.soal') }}" class="btn btn-primary">
+                        <a href="{{ route('admin.add_banksoal') }}" class="btn btn-primary">
                             <i class="bi bi-plus-circle me-2"></i>Tambah Bank Soal Baru
                         </a>
                     </div>
@@ -43,10 +43,10 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">No</th>
                                 <th scope="col">Jenis Bahasa</th>
-                                <th scope="col">Jenis Soal</th>
-                                <th scope="col" class="text-center">Jumlah Soal</th>
+                                <th scope="col">Jenis Materi</th>
+                                <th scope="col">Bank Soal</th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -55,31 +55,20 @@
                                 <td>1</td>
                                 <td>Listening Part A: Short Conversations</td>
                                 <td>Listening Comprehension</td>
-                                <td class="text-center">50</td>
+                                <td>Bank Soal 1</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bank soal ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <a href="{{ route('admin.kelolasoal') }}" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
+                                    <a href="{{ route('admin.lihatsoal') }}" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-eye"></i> Lihat Soal</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>2</td>
                                 <td>Structure: Incomplete Sentences</td>
                                 <td>Structure and Written Expression</td>
-                                <td class="text-center">40</td>
+                                <td>Bank Soal 2</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="#" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bank soal ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
-                                </td>
+                                    <a href="{{ route('admin.kelolasoal') }}" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
+                                    <a href="{{ route('admin.lihatsoal') }}" class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-eye"></i> Lihat Soal</a>
                             </tr>
                         </tbody>
                     </table>

@@ -18,11 +18,22 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/manage', 'manageuser')->name('admin.manage');
             Route::get('/materi', 'materi')->name('admin.materi');
             Route::get('/buatMateri', 'buatmateri')->name('admin.buatmateri');
+
+            // bank soal
             Route::get('/banksoal', 'banksoal')->name('admin.banksoal');
-            Route::get('/buatsoal', 'soal')->name('admin.soal');
+            Route::get('/buat_banksoal', 'tambah_banksoal')->name('admin.add_banksoal');
+            Route::get('/kelolasoal', 'kelola_banksoal')->name('admin.kelolasoal');
+            Route::get('/lihatsoal', 'lihatsoal')->name('admin.lihatsoal');
+            Route::get('/buatsoal', 'buatsoal')->name('admin.buatsoal');
+            Route::get('/editsoal', 'editsoal')->name('admin.editsoal');
+
+            // setting ujian
+            Route::get('/sesiujian', 'sesiujian')->name('admin.sesiujian');
+            Route::get('/eventujian', 'eventujian')->name('admin.eventujian');
+
+            // hasil tes
             Route::get('/hasiltes', 'hasiltes')->name('admin.hasiltes');
         });
-
     });
 });
 
@@ -36,12 +47,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
             Route::get('/materi', 'materi')->name('participant.materi');
             Route::get('/simulasi', 'simulasi')->name('participant.simulasi');
             Route::get('/ujian', 'ujian')->name('participant.ujian');
-
-
-
         });
-
-
     });
 });
 
@@ -54,4 +60,4 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
