@@ -32,31 +32,23 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($materis as $index => $materi)
                             <tr>
-                                <td>1</td>
-                                <td>Bahasa Inggris</td>
-                                <td class="text-center">Listening Comprehension</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $materi->jenis_bahasa }}</td>
+                                <td class="text-center">{{ $materi->jenis_materi }}</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <a href="{{ asset('storage/' . $materi->materi)  }}" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
+                                        <button class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-id="{{ $materi->id }}"
+                                            data-title="{{ $materi->jenis_materi }}"><i class="bi bi-trash-fill"></i></button>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Structure and Written Expression</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Reading Comprehension</td>
-                                <td class="text-center">8</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
-
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -64,4 +56,45 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus <strong id="materiTitle"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var title = button.getAttribute('data-title');
+
+            // update modal content
+            var materiTitle = deleteModal.querySelector('#materiTitle');
+            materiTitle.textContent = title;
+
+            // update form action
+            var form = deleteModal.querySelector('#deleteForm');
+            form.action = '/admin/hapus_Materi/' + id;
+        });
+    });
+</script>
 @endsection

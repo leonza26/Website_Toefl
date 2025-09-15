@@ -18,6 +18,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/manage', 'manageuser')->name('admin.manage');
             Route::get('/materi', 'materi')->name('admin.materi');
             Route::get('/buatMateri', 'buatmateri')->name('admin.buatmateri');
+            Route::post('/create_Materi', 'create_materi')->name('admin.create_materi');
+            Route::delete('/hapus_Materi/{id}', 'hapus_materi')->name('admin.hapus_materi');
 
             // bank soal
             Route::get('/banksoal', 'banksoal')->name('admin.banksoal');

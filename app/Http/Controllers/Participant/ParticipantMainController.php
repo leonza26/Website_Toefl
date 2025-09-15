@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Participant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Materi;
 use Illuminate\Http\Request;
 
 class ParticipantMainController extends Controller
@@ -15,7 +16,9 @@ class ParticipantMainController extends Controller
 
     public function materi()
     {
-        return view('participant.materi');
+        $materis = Materi::all();
+
+        return view('participant.materi', compact('materis'));
     }
 
     public function simulasi()
