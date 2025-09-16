@@ -7,6 +7,7 @@ use App\Models\Materi;
 use App\Models\BankSoal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Soal;
 use Illuminate\Support\Facades\Storage;
 
 class AdminMainController extends Controller
@@ -57,8 +58,6 @@ class AdminMainController extends Controller
         // 2. Store file in storage/app/public/pdfs
         $path = $request->file('materiFile')->store('pdfs', 'public');
 
-        // 3. Save the path in database (if needed)
-        // Example: Materi model has 'file_path' column
         Materi::create([
             'jenis_bahasa' => $request->jenisBahasa,
             'jenis_materi' => $request->jenisMateri,
@@ -108,26 +107,83 @@ class AdminMainController extends Controller
         return view('admin.BankSoal.tambah_banksoal');
     }
 
-    public function kelola_banksoal()
+    public function kelola_banksoal($id)
     {
-        return view('admin.BankSoal.kelolasoal');
+        $bank_soal = BankSoal::with('soals')->findOrFail($id);
+
+        $soals = $bank_soal->soals;
+
+        return view('admin.BankSoal.kelolasoal', compact('bank_soal', 'soals'));
     }
 
-    public function lihatsoal()
+    public function lihatsoal($id)
     {
-        return view('admin.BankSoal.lihatsoal');
+        $bank_soal = BankSoal::with('soals')->findOrFail($id);
+
+        $soals = $bank_soal->soals;
+
+        return view('admin.BankSoal.lihatsoal', compact('bank_soal', 'soals'));
     }
 
-    public function buatsoal()
+    public function buatsoal($id)
     {
-        return view('admin.BankSoal.buatsoal');
+        $bank_soal = BankSoal::where('id', $id)->first();
+
+        return view('admin.BankSoal.buatsoal', compact('bank_soal'));
     }
 
-    public function editsoal()
+    public function storesoal(Request $request, $id)
     {
-        return view('admin.BankSoal.editsoal');
+        $bank_soal = BankSoal::where('id', $id)->first();
+
+        $validate_data = $request->validate([
+            'pertanyaan' => 'required',
+            'a' => 'required|string|max:255',
+            'b' => 'required|string|max:255',
+            'c' => 'required|string|max:255',
+            'd' => 'required|string|max:255',
+            'jawaban_benar' => 'required|string|max:255',
+        ]);
+
+        $validate_data['bank_soal_id'] = $bank_soal->id;
+
+        Soal::create($validate_data);
+
+        return redirect()->route('admin.banksoal')->with('success', 'Soal berhasil ditambahkan!');
     }
 
+    public function editsoal($id)
+    {
+        $soal = Soal::where('id', $id)->firstOrFail();
+
+        return view('admin.BankSoal.editsoal', compact('soal'));
+    }
+
+    public function updatesoal(Request $request, $id)
+    {
+        $validate_data = $request->validate([
+            'pertanyaan' => 'required',
+            'a' => 'required|string|max:255',
+            'b' => 'required|string|max:255',
+            'c' => 'required|string|max:255',
+            'd' => 'required|string|max:255',
+            'jawaban_benar' => 'required|string|max:255',
+        ]);
+
+        $soal = Soal::findOrFail($id);
+        $soal->update($validate_data);
+
+        return redirect()->route('admin.banksoal')->with('success', 'Soal berhasil ditambahkan!');
+    }
+
+    public function hapussoal($id)
+    {
+        $soal = Soal::findOrFail($id);
+
+        $soal->delete();
+
+        return redirect()->route('admin.banksoal')->with('success', 'Materi berhasil dihapus!');
+    }
 
     // setting ujian
 

@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center mb-3">
             {{-- NOTE: Arahkan route ini kembali ke halaman kelola soal --}}
             {{-- route('admin.kelolasoal', ['id' => $bankSoal->id]) --}}
-            <a href="{{ route('admin.kelolasoal') }}" class="btn btn-outline-secondary me-3">
+            <a href="{{ route('admin.kelolasoal', $bank_soal->id) }}" class="btn btn-outline-secondary me-3">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
             <div>
@@ -20,18 +20,27 @@
             </div>
         </div>
 
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <h6 class="fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terjadi Kesalahan:</h6>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+            
         <div class="card shadow-sm border-0">
             {{-- NOTE: Arahkan action form ini ke route untuk menyimpan soal --}}
-            <form action="{{-- route('admin.bank_soal.store_soal') --}}" method="POST">
+            <form action="{{ route('admin.storesoal', $bank_soal->id) }}" method="POST">
                 @csrf
-                {{-- NOTE: Tambahkan input hidden untuk mengirim ID bank soal --}}
-                <input type="hidden" name="bank_soal_id" value="{{-- $bankSoal->id --}}">
 
                 <div class="card-body">
                     {{-- Input untuk Teks Pertanyaan --}}
                     <div class="mb-4">
                         <label for="question_text" class="form-label fw-semibold">Teks Pertanyaan</label>
-                        <textarea class="form-control" id="question_text" name="question_text" rows="4" placeholder="Masukkan teks pertanyaan di sini..." required></textarea>
+                        <textarea class="form-control" id="question_text" name="pertanyaan" rows="4" placeholder="Masukkan teks pertanyaan di sini..." required></textarea>
                     </div>
 
                     {{-- Input untuk Pilihan Jawaban --}}
@@ -42,33 +51,33 @@
                         {{-- Opsi A --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="A" required aria-label="Pilih sebagai jawaban benar">
+                                <input class="form-check-input mt-0" type="radio" name="jawaban_benar" value="A" required aria-label="Pilih sebagai jawaban benar">
                             </div>
-                            <input type="text" class="form-control" name="options[A]" placeholder="Teks Jawaban A" required>
+                            <input type="text" class="form-control" name="a" placeholder="Teks Jawaban A" required>
                         </div>
 
                         {{-- Opsi B --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="B" aria-label="Pilih sebagai jawaban benar">
+                                <input class="form-check-input mt-0" type="radio" name="jawaban_benar" value="B" aria-label="Pilih sebagai jawaban benar">
                             </div>
-                            <input type="text" class="form-control" name="options[B]" placeholder="Teks Jawaban B" required>
+                            <input type="text" class="form-control" name="b" placeholder="Teks Jawaban B" required>
                         </div>
 
                         {{-- Opsi C --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="C" aria-label="Pilih sebagai jawaban benar">
+                                <input class="form-check-input mt-0" type="radio" name="jawaban_benar" value="C" aria-label="Pilih sebagai jawaban benar">
                             </div>
-                            <input type="text" class="form-control" name="options[C]" placeholder="Teks Jawaban C" required>
+                            <input type="text" class="form-control" name="c" placeholder="Teks Jawaban C" required>
                         </div>
 
                         {{-- Opsi D --}}
                         <div class="input-group">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="D" aria-label="Pilih sebagai jawaban benar">
+                                <input class="form-check-input mt-0" type="radio" name="jawaban_benar" value="D" aria-label="Pilih sebagai jawaban benar">
                             </div>
-                            <input type="text" class="form-control" name="options[D]" placeholder="Teks Jawaban D" required>
+                            <input type="text" class="form-control" name="d" placeholder="Teks Jawaban D" required>
                         </div>
                     </div>
                 </div>

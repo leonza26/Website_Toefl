@@ -23,7 +23,7 @@
             <div class="card-header bg-white border-0 pt-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title fw-semibold mb-0">Daftar Pertanyaan</h5>
-                    <a href="{{ route('admin.buatsoal') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.buatsoal', $bank_soal->id) }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle-fill me-2"></i>Tambah Soal Baru
                     </a>
                 </div>
@@ -40,52 +40,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Contoh Soal 1 --}}
+
+                            @forelse ($soals as $index => $soal)
                             <tr>
-                                <td>1</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <p class="mb-0">"The man thinks the woman should ____."</p>
+                                    <p class="mb-0">{{ $soal->pertanyaan }}</p>
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge bg-success">B</span>
+                                    <span class="badge bg-success">{{ $soal->jawaban_benar }}</span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('admin.editsoal') }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <a href="#" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></a>
+                                    <a href="{{ route('admin.editsoal', $soal->id) }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                                    <button class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        data-id="{{ $soal->id }}"
+                                        data-title="Soal Ini"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
-                            {{-- Contoh Soal 2 (Structure) --}}
+                            @empty
                             <tr>
-                                <td>2</td>
-                                <td>
-                                    <p class="mb-0">"The committee has met and ____."</p>
-                                    <small class="text-muted">A. they have reached a decision</small><br>
-                                    <small class="text-muted">B. it has reached a decision</small><br>
-                                    <small class="text-muted">C. its decision was reached</small><br>
-                                    <small class="text-muted">D. it's decision was reached</small>
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge bg-success">B</span>
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.editsoal') }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <a href="#" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></a>
+                                <td colspan="4" class="text-center text-muted">
+                                    Belum Ada Soal
                                 </td>
                             </tr>
-                             {{-- Contoh Soal 3 --}}
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <p class="mb-0">"What does the woman imply?"</p>
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge bg-success">A</span>
-                                </td>
-                                <td class="text-center">
-                                   <a href="{{ route('admin.editsoal') }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    <a href="#" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
+                            @endforelse
+
                         </tbody>
                     </table>
                 </div>
@@ -96,4 +77,45 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus <strong id="materiTitle"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var title = button.getAttribute('data-title');
+
+            // update modal content
+            var materiTitle = deleteModal.querySelector('#materiTitle');
+            materiTitle.textContent = title;
+
+            // update form action
+            var form = deleteModal.querySelector('#deleteForm');
+            form.action = '/admin/hapussoal/' + id;
+        });
+    });
+</script>
 @endsection

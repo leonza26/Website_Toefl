@@ -78,9 +78,9 @@
                                         <td>{{ $bank_soal->jenis_materi }}</td>
                                         <td>{{ $bank_soal->nama_banksoal }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.kelolasoal') }}" class="btn btn-sm btn-primary"
+                                            <a href="{{ route('admin.kelolasoal', $bank_soal->id) }}" class="btn btn-sm btn-primary"
                                                 title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
-                                            <a href="{{ route('admin.lihatsoal') }}" class="btn btn-sm btn-primary"
+                                            <a href="{{ route('admin.lihatsoal', $bank_soal->id) }}" class="btn btn-sm btn-primary"
                                                 title="Kelola Soal"><i class="bi bi-eye"></i> Lihat Soal</a>
                                         </td>
                                     </tr>
