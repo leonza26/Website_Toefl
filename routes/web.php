@@ -1,12 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\admin\AdminMainController;
 use App\Http\Controllers\Participant\ParticipantMainController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $isAdmin = false;
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        $isAdmin = true;
+    }
+    return view('welcome', compact('isAdmin'));
 })->name('home');
 
 
