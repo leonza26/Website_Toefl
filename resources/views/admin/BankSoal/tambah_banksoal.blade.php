@@ -13,7 +13,7 @@
             </div>
             <div class="card-body">
 
-                <form method="GET" action="{{ route('admin.banksoal_store') }}">
+                <form method="POST" action="{{ route('admin.banksoal_store') }}">
                     @csrf
                     <div class="mb-3">
                         <label for="operator" class="form-label fw-bolder">Jenis Bahasa</label>

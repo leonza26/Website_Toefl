@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::controller(AdminMainController::class)->group(function () {
             Route::get('/dashboard', 'admin')->name('admin');
             Route::get('/manage', 'manageuser')->name('admin.manage');
+
+            // materi
             Route::get('/materi', 'materi')->name('admin.materi');
             Route::get('/buatMateri', 'buatmateri')->name('admin.buatmateri');
             Route::post('/create_Materi', 'create_materi')->name('admin.create_materi');
@@ -24,7 +26,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             // bank soal
             Route::get('/banksoal', 'banksoal')->name('admin.banksoal');
             // create banksoal
-            Route::get('/create_banksoal', 'store')->name('admin.banksoal_store');
+            Route::post('/create_banksoal', 'store')->name('admin.banksoal_store');
 
             // FE add bank soal
             Route::get('/buat_banksoal', 'tambah_banksoal')->name('admin.add_banksoal');
