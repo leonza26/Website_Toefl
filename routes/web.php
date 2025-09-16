@@ -23,7 +23,13 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
             // bank soal
             Route::get('/banksoal', 'banksoal')->name('admin.banksoal');
+            // create banksoal
+            Route::get('/create_banksoal', 'store')->name('admin.banksoal_store');
+
+            // FE add bank soal
             Route::get('/buat_banksoal', 'tambah_banksoal')->name('admin.add_banksoal');
+
+            // soal
             Route::get('/kelolasoal', 'kelola_banksoal')->name('admin.kelolasoal');
             Route::get('/lihatsoal', 'lihatsoal')->name('admin.lihatsoal');
             Route::get('/buatsoal', 'buatsoal')->name('admin.buatsoal');

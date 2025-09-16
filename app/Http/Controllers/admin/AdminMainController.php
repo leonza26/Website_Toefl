@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Materi;
 use App\Models\User;
+use App\Models\Materi;
+use App\Models\BankSoal;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class AdminMainController extends Controller
@@ -83,7 +84,23 @@ class AdminMainController extends Controller
     // bank soal
     public function banksoal()
     {
-        return view('admin.BankSoal.banksoal');
+        $bank_soals = BankSoal::all();
+
+        return view('admin.BankSoal.banksoal', compact('bank_soals'));
+    }
+
+    public function store(Request $request)
+    {
+        $validate_data = $request->validate([
+            'jenis_bahasa' => 'required|string|max:255',
+            'jenis_materi' => 'required|string|max:255',
+            'nama_banksoal' => 'nullable|string',
+
+        ]);
+
+        BankSoal::create($validate_data);
+
+        return redirect()->route('admin.banksoal')->with('success', 'Bank Soal berhasil ditambahkan!');
     }
 
     public function tambah_banksoal()
