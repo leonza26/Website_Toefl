@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center mb-3">
             {{-- NOTE: Arahkan route ini kembali ke halaman kelola soal --}}
             {{-- route('admin.bank_soal.kelola', ['id' => $soal->bank_soal_id]) --}}
-            <a href="{{ route('admin.kelolasoal') }}" class="btn btn-outline-secondary me-3">
+            <a href="{{ route('admin.kelolasoal', $soal->bank_soal_id) }}" class="btn btn-outline-secondary me-3">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
             <div>
@@ -19,19 +19,35 @@
                 <p class="text-muted small mb-0">Ubah detail pertanyaan dan pilihan jawaban di bawah ini.</p>
             </div>
         </div>
+        
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <h6 class="fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terjadi Kesalahan:</h6>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <div class="card shadow-sm border-0">
             {{-- NOTE: Arahkan action form ini ke route untuk mengupdate soal --}}
-            <form action="{{-- route('admin.bank_soal.update_soal', ['id' => $soal->id]) --}}" method="POST">
+            <form action="{{ route('admin.updatesoal', $soal->id ) }}" method="POST">
                 @csrf
-                @method('PUT') {{-- Diperlukan untuk proses update --}}
+                @method('PUT')
 
                 <div class="card-body">
                     {{-- Input untuk Teks Pertanyaan --}}
                     <div class="mb-4">
                         <label for="question_text" class="form-label fw-semibold">Teks Pertanyaan</label>
-                        {{-- NOTE: Tampilkan teks soal yang sudah ada --}}
-                        <textarea class="form-control" id="question_text" name="question_text" rows="4" placeholder="Masukkan teks pertanyaan di sini..." required>{{-- old('question_text', $soal->question_text) --}}</textarea>
+                        <textarea
+                            class="form-control"
+                            id="question_text"
+                            name="pertanyaan"
+                            rows="4"
+                            placeholder="Masukkan teks pertanyaan di sini..."
+                            required>{{ old('question_text', $soal->pertanyaan) }}</textarea>
                     </div>
 
                     {{-- Input untuk Pilihan Jawaban --}}
@@ -42,43 +58,86 @@
                         {{-- Opsi A --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                {{-- NOTE: Cek jika ini adalah jawaban yang benar --}}
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="A" required aria-label="Pilih sebagai jawaban benar" {{-- old('correct_answer', $soal->correct_answer) == 'A' ? 'checked' : '' --}}>
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="A"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'A' ? 'checked' : '' }}
+                                    required>
                             </div>
-                            {{-- NOTE: Tampilkan teks opsi yang sudah ada --}}
-                            <input type="text" class="form-control" name="options[A]" placeholder="Teks Jawaban A" value="{{-- old('options.A', $soal->options['A']) --}}" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="a"
+                                placeholder="Teks Jawaban A"
+                                value="{{ old('a', $soal->a) }}"
+                                required>
                         </div>
 
                         {{-- Opsi B --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="B" aria-label="Pilih sebagai jawaban benar" {{-- old('correct_answer', $soal->correct_answer) == 'B' ? 'checked' : '' --}}>
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="B"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'B' ? 'checked' : '' }}>
                             </div>
-                            <input type="text" class="form-control" name="options[B]" placeholder="Teks Jawaban B" value="{{-- old('options.B', $soal->options['B']) --}}" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="b"
+                                placeholder="Teks Jawaban B"
+                                value="{{ old('b', $soal->b) }}"
+                                required>
                         </div>
 
                         {{-- Opsi C --}}
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="C" aria-label="Pilih sebagai jawaban benar" {{-- old('correct_answer', $soal->correct_answer) == 'C' ? 'checked' : '' --}}>
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="C"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'C' ? 'checked' : '' }}>
                             </div>
-                            <input type="text" class="form-control" name="options[C]" placeholder="Teks Jawaban C" value="{{-- old('options.C', $soal->options['C']) --}}" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="c"
+                                placeholder="Teks Jawaban C"
+                                value="{{ old('c', $soal->c) }}"
+                                required>
                         </div>
 
                         {{-- Opsi D --}}
                         <div class="input-group">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" name="correct_answer" value="D" aria-label="Pilih sebagai jawaban benar" {{-- old('correct_answer', $soal->correct_answer) == 'D' ? 'checked' : '' --}}>
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="D"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'D' ? 'checked' : '' }}>
                             </div>
-                            <input type="text" class="form-control" name="options[D]" placeholder="Teks Jawaban D" value="{{-- old('options.D', $soal->options['D']) --}}" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="d"
+                                placeholder="Teks Jawaban D"
+                                value="{{ old('d', $soal->d) }}"
+                                required>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-footer bg-white border-0 text-end py-3">
-                    <a href="{{-- route('admin.bank_soal.kelola', ['id' => $soal->bank_soal_id]) --}}" class="btn btn-outline-secondary">Batal</a>
+                    <a href="{{ route('admin.kelolasoal', ['id' => $soal->bank_soal_id]) }}" class="btn btn-outline-secondary">Batal</a>
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-save-fill me-2"></i>Update Soal
+                        <i class="bi bi-save-fill me-2"></i> Update Soal
                     </button>
                 </div>
             </form>

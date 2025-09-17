@@ -14,7 +14,7 @@
             </a>
             <div>
                 {{-- NOTE: Ganti dengan data dinamis dari controller, contoh: $bankSoal->nama --}}
-                <h4 class="mb-0 fw-semibold">Listening Part A: Short Conversations</h4>
+                <h4 class="mb-0 fw-semibold">{{ $bank_soal->nama_banksoal }}</h4>
                 <p class="text-muted small mb-0">Ini adalah pratinjau bagaimana soal akan ditampilkan kepada peserta.</p>
             </div>
         </div>
@@ -23,82 +23,50 @@
             <div class="card-body p-4 p-md-5">
                 <ol class="list-group list-group-numbered">
 
-                    {{-- Contoh Soal 1 --}}
+                    @forelse ($soals as $soal)
                     <li class="list-group-item d-flex flex-column border-0 ps-3 mb-4">
-                        <p class="fw-semibold mb-2">"The man thinks the woman should ____."</p>
+                        <p class="fw-semibold mb-2">"{{ $soal->pertanyaan }}"</p>
                         <div class="ms-2">
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option A</label>
-                            </div>
-                            <div class="form-check mb-1 bg-light-success rounded p-2 border border-success">
-                                <input class="form-check-input" type="radio" checked disabled>
-                                <label class="form-check-label fw-bold text-success">
-                                    Option B (Jawaban Benar)
+                            {{-- Opsi A --}}
+                            <div class="form-check mb-1 {{ $soal->jawaban_benar === 'A' ? 'bg-light-success rounded p-2 border border-success' : '' }}">
+                                <input class="form-check-input" type="radio" {{ $soal->jawaban_benar === 'A' ? 'checked' : '' }} disabled>
+                                <label class="form-check-label {{ $soal->jawaban_benar === 'A' ? 'fw-bold text-success' : '' }}">
+                                    {{ $soal->a }}
                                 </label>
                             </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option C</label>
+
+                            {{-- Opsi B --}}
+                            <div class="form-check mb-1 {{ $soal->jawaban_benar === 'B' ? 'bg-light-success rounded p-2 border border-success' : '' }}">
+                                <input class="form-check-input" type="radio" {{ $soal->jawaban_benar === 'B' ? 'checked' : '' }} disabled>
+                                <label class="form-check-label {{ $soal->jawaban_benar === 'B' ? 'fw-bold text-success' : '' }}">
+                                    {{ $soal->b }}
+                                </label>
                             </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option D</label>
+
+                            {{-- Opsi C --}}
+                            <div class="form-check mb-1 {{ $soal->jawaban_benar === 'C' ? 'bg-light-success rounded p-2 border border-success' : '' }}">
+                                <input class="form-check-input" type="radio" {{ $soal->jawaban_benar === 'C' ? 'checked' : '' }} disabled>
+                                <label class="form-check-label {{ $soal->jawaban_benar === 'C' ? 'fw-bold text-success' : '' }}">
+                                    {{ $soal->c }}
+                                </label>
+                            </div>
+
+                            {{-- Opsi D --}}
+                            <div class="form-check mb-1 {{ $soal->jawaban_benar === 'D' ? 'bg-light-success rounded p-2 border border-success' : '' }}">
+                                <input class="form-check-input" type="radio" {{ $soal->jawaban_benar === 'D' ? 'checked' : '' }} disabled>
+                                <label class="form-check-label {{ $soal->jawaban_benar === 'D' ? 'fw-bold text-success' : '' }}">
+                                    {{ $soal->d }}
+                                </label>
                             </div>
                         </div>
                     </li>
                     <hr class="my-4">
 
-                    {{-- Contoh Soal 2 (Structure) --}}
-                    <li class="list-group-item d-flex flex-column border-0 ps-3 mb-4">
-                        <p class="fw-semibold mb-2">"The committee has met and ____."</p>
-                        <div class="ms-2">
-                             <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">A. they have reached a decision</label>
-                            </div>
-                            <div class="form-check mb-1 bg-light-success rounded p-2 border border-success">
-                                <input class="form-check-input" type="radio" checked disabled>
-                                <label class="form-check-label fw-bold text-success">
-                                    B. it has reached a decision (Jawaban Benar)
-                                </label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">C. its decision was reached</label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">D. it's decision was reached</label>
-                            </div>
-                        </div>
-                    </li>
-                    <hr class="my-4">
+                    @empty
 
-                    {{-- Contoh Soal 3 --}}
-                     <li class="list-group-item d-flex flex-column border-0 ps-3">
-                        <p class="fw-semibold mb-2">"What does the woman imply?"</p>
-                        <div class="ms-2">
-                            <div class="form-check mb-1 bg-light-success rounded p-2 border border-success">
-                                <input class="form-check-input" type="radio" checked disabled>
-                                <label class="form-check-label fw-bold text-success">
-                                    Option A (Jawaban Benar)
-                                </label>
-                            </div>
-                             <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option B</label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option C</label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" disabled>
-                                <label class="form-check-label">Option D</label>
-                            </div>
-                        </div>
-                    </li>
+                    <li class="text-muted">No data is available</li>
+
+                    @endforelse
 
                 </ol>
             </div>
@@ -108,8 +76,8 @@
 
 {{-- Helper CSS untuk highlight jawaban benar --}}
 <style>
-.bg-light-success {
-    background-color: #e2f5e9 !important;
-}
+    .bg-light-success {
+        background-color: #e2f5e9 !important;
+    }
 </style>
 @endsection

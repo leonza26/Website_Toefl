@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Soal extends Model
 {
     //
-     use HasFactory;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,11 @@ class Soal extends Model
     protected $fillable = [
         'bank_soal_id',
         'pertanyaan',
+        'a',
+        'b',
+        'c',
+        'd',
+        'jawaban_benar',
     ];
 
     // Satu Soal pasti dimiliki oleh satu BankSoal.
@@ -34,5 +39,4 @@ class Soal extends Model
     {
         return $this->hasMany(PilihanJawaban::class);
     }
-
 }

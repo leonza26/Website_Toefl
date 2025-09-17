@@ -37,10 +37,13 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/buat_banksoal', 'tambah_banksoal')->name('admin.add_banksoal');
 
             // soal
-            Route::get('/kelolasoal', 'kelola_banksoal')->name('admin.kelolasoal');
-            Route::get('/lihatsoal', 'lihatsoal')->name('admin.lihatsoal');
-            Route::get('/buatsoal', 'buatsoal')->name('admin.buatsoal');
-            Route::get('/editsoal', 'editsoal')->name('admin.editsoal');
+            Route::get('/kelolasoal/{id}', 'kelola_banksoal')->name('admin.kelolasoal');
+            Route::get('/lihatsoal/{id}', 'lihatsoal')->name('admin.lihatsoal');
+            Route::get('/buatsoal/{id}', 'buatsoal')->name('admin.buatsoal');
+            Route::post('/storesoal/{id}', 'storesoal')->name('admin.storesoal');
+            Route::get('/editsoal/{id}', 'editsoal')->name('admin.editsoal');
+            Route::put('/updatesoal/{id}', 'updatesoal')->name('admin.updatesoal');
+            Route::delete('/hapussoal/{id}', 'hapussoal')->name('admin.hapussoal');
 
             // setting ujian
             Route::get('/sesiujian', 'sesiujian')->name('admin.sesiujian');

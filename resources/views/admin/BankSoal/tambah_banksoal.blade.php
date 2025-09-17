@@ -37,7 +37,7 @@
                         </select>
                     </div>
 
-                   {{-- bank soal --}}
+                    {{-- bank soal --}}
                     <div class="mb-3 fw-bolder">
                         <label class="form-label">Nama Bank Soal</label>
                         <input type="text" name="nama_banksoal" class="form-control" id="exampleFormControlInput1">
