@@ -19,6 +19,7 @@ class Soal extends Model
     protected $fillable = [
         'bank_soal_id',
         'pertanyaan',
+        'file',
         'a',
         'b',
         'c',

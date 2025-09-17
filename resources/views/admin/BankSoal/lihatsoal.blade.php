@@ -27,6 +27,16 @@
                     <li class="list-group-item d-flex flex-column border-0 ps-3 mb-4">
                         <p class="fw-semibold mb-2">"{{ $soal->pertanyaan }}"</p>
                         <div class="ms-2">
+
+                            @if ($soal->file)
+                            <div class="mb-3">
+                                <audio controls>
+                                    <source src="{{ asset('storage/' . $soal->file) }}" type="audio/mpeg">
+                                    Browser kamu tidak mendukung audio player.
+                                </audio>
+                            </div>
+                            @endif
+                            
                             {{-- Opsi A --}}
                             <div class="form-check mb-1 {{ $soal->jawaban_benar === 'A' ? 'bg-light-success rounded p-2 border border-success' : '' }}">
                                 <input class="form-check-input" type="radio" {{ $soal->jawaban_benar === 'A' ? 'checked' : '' }} disabled>

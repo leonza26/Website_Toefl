@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('bank_soal_id')->constrained()->onDelete('cascade');
             // menyimpan pertanyaan
             $table->text('pertanyaan');
+            $table->string('file')->nullable();
             $table->string('a');
             $table->string('b');
             $table->string('c');
