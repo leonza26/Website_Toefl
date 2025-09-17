@@ -14,7 +14,7 @@
             </a>
             <div>
                 {{-- NOTE: Ganti dengan data dinamis dari controller, contoh: $bankSoal->nama --}}
-                <h4 class="mb-0 fw-semibold">Listening Part A: Short Conversations</h4>
+                <h4 class="mb-0 fw-semibold">{{ $bank_soal->nama_banksoal }}</h4>
                 <p class="text-muted small mb-0">Kelola semua pertanyaan untuk bank soal ini.</p>
             </div>
         </div>
