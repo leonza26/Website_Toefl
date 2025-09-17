@@ -20,6 +20,7 @@ class AdminMainController extends Controller
         return view('admin.admin', compact('mahasiswa'));
     }
 
+    // manage user
     public function manageuser()
     {
         $admins = User::where('role', '0')->get();
@@ -185,17 +186,6 @@ class AdminMainController extends Controller
         return redirect()->route('admin.banksoal')->with('success', 'Materi berhasil dihapus!');
     }
 
-    // setting ujian
-
-    public function sesiujian()
-    {
-        return view('admin.Ujian.sesiujian');
-    }
-
-    public function eventujian()
-    {
-        return view('admin.Ujian.eventujian');
-    }
 
     // hasil tes
     public function hasiltes()

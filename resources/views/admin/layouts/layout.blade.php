@@ -76,7 +76,6 @@
             <div class="ms-auto">
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                        <img src="https://source.unsplash.com/40x40/?person,admin" alt="" class="rounded-circle avatar me-2">
                         <span class="fw-semibold">{{ Auth::user()->name }} (Admin)</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow">

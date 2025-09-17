@@ -29,6 +29,13 @@ class BankSoal extends Model
     }
 
 
+    public function eventUjians()
+    {
+        return $this->hasMany(EventUjian::class);
+    }
+
+
+
 
 
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\admin\AdminMainController;
+use App\Http\Controllers\Admin\EventUjianController;
 use App\Http\Controllers\Participant\ParticipantMainController;
 
 Route::get('/', function () {
@@ -46,12 +47,23 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::delete('/hapussoal/{id}', 'hapussoal')->name('admin.hapussoal');
 
             // setting ujian
-            Route::get('/sesiujian', 'sesiujian')->name('admin.sesiujian');
-            Route::get('/eventujian', 'eventujian')->name('admin.eventujian');
+
 
             // hasil tes
             Route::get('/hasiltes', 'hasiltes')->name('admin.hasiltes');
         });
+
+        Route::controller(EventUjianController::class)->group(function () {
+            Route::get('/sesiujian', 'sesiujian')->name('admin.sesiujian');
+            Route::get('/eventujian', 'eventujian')->name('admin.eventujian');
+            Route::post('/create_eventujian', 'store')->name('event.create');
+            Route::patch('/token_eventujian', 'releaseToken')->name('event.token');
+            Route::patch('/aktifkan_eventujian', 'aktifkanUjian')->name('event.aktifkan_ujian');
+            Route::delete('/hapus_eventujian', 'destroy')->name('event.hapus');
+
+        });
+
+
     });
 });
 

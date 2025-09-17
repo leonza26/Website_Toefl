@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\BankSoal;
+use App\Models\EventUjian;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class EventUjianController extends Controller
+{
+
+    // event
+    public function eventujian()
+    {
+        $events = EventUjian::with('bankSoal')->latest()->get();
+        return view('admin.Ujian.eventujian', compact('events'));
+    }
+
+    // sesi
+    public function sesiujian()
+    {
+        $bankSoals = BankSoal::all();
+        return view('admin.Ujian.sesiujian', compact('bankSoals'));
+    }
+
+
+    // buat sesi ujian
+    public function store(Request $request)
+    {
+        // Validasi data yang masuk
+        $validated = $request->validate([
+            'judul_ujian' => 'required|string|max:255',
+            'bank_soal_id' => 'required|integer|exists:bank_soals,id',
+            'waktu_ujian' => 'required|integer|min:1',
+            'tanggal_ujian' => 'required|date',
+        ]);
+
+        // Buat data baru
+        EventUjian::create([
+            'judul' => $validated['judul_ujian'],
+            'bank_soal_id' => $validated['bank_soal_id'],
+            'waktu_ujian' => $validated['waktu_ujian'],
+            'tanggal_ujian' => $validated['tanggal_ujian'],
+        ]);
+
+
+        return redirect()->route('admin.eventujian')->with('success', 'Event Ujian berhasil dibuat!');
+    }
+
+
+    // aktifkan ujian
+    public function aktifkanUjian(EventUjian $eventUjian)
+    {
+        $eventUjian->update(['status' => 'aktif']);
+        return back()->with('success', 'Ujian berhasil diaktifkan.');
+    }
+
+    // token
+    public function releaseToken(EventUjian $eventUjian)
+    {
+        // token acak 6 karakter
+        $token = Str::upper(Str::random(6));
+        $eventUjian->update(['token' => $token]);
+        return back()->with('success', 'Token berhasil dirilis: ' . $token);
+    }
+
+    // hapus event
+    public function destroy(EventUjian $eventUjian)
+    {
+        $eventUjian->delete();
+        return back()->with('success', 'Event ujian berhasil dihapus.');
+    }
+
+}
