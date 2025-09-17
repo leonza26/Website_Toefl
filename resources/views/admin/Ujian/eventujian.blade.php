@@ -58,7 +58,7 @@
                                 @forelse ($events as $event)
                                     <tr>
                                         <td class="fw-semibold">{{ $event->judul }}</td>
-                                        <td>{{ $event->bank_soal_id }}</td>
+                                        <td>{{ $event->bankSoal->nama_banksoal ?? 'N/A' }}</td>
                                         <td>{{ $event->waktu_ujian }}</td>
                                         <td>{{ \Carbon\Carbon::parse($event->tanggal_ujian)->format('d M Y') }}</td>
                                         <td>
@@ -108,16 +108,19 @@
                                                                 Token</button>
                                                         </form>
                                                     @endif
+                                                    <form action="{{ route('event.selesai_ujian', $event) }}" method="POST"
+                                                        class="d-inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                            class="btn btn-warning btn-sm">Selesai</button>
+                                                    </form>
                                                 @endif
                                                 {{-- menghapus event --}}
-                                                <form action="{{ route('event.hapus', $event) }}" method="POST"
-                                                    class="d-inline"
-                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus event ini?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i
-                                                            class="bi bi-trash-fill"></i></button>
-                                                </form>
+                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal" data-id="{{ $event->id }}"
+                                                    data-title="{{ $event->judul }}"><i
+                                                        class="bi bi-trash-fill"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -136,4 +139,48 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Konfirmasi Hapus</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin menghapus event ujian: <br> <strong id="deleteItemTitle"
+                                class="fw-bold"></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        {{-- Form akan diisi oleh JavaScript --}}
+                        <form id="deleteForm" method="POST" action="">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var deleteModal = document.getElementById('deleteModal');
+                deleteModal.addEventListener('show.bs.modal', function(event) {
+                    var button = event.relatedTarget;
+                    var id = button.getAttribute('data-id');
+                    var title = button.getAttribute('data-title');
+
+                    // update modal content
+                    var materiTitle = deleteModal.querySelector('#deleteItemTitle');
+                    materiTitle.textContent = title;
+
+                    // update form action
+                    var form = deleteModal.querySelector('#deleteForm');
+                    form.action = '/admin/hapus_eventujian/' + id;
+                });
+            });
+        </script>
     @endsection

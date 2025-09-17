@@ -57,6 +57,18 @@ class EventUjianController extends Controller
         return back()->with('success', 'Ujian berhasil diaktifkan.');
     }
 
+    // selesaikan paksa ujian
+    public function selesaikanUjian(EventUjian $eventUjian)
+    {
+        //  hanya ujian yang aktif yang bisa diselesaikan
+        if ($eventUjian->status !== 'aktif') {
+            return back()->with('error', 'Hanya ujian yang aktif yang bisa diselesaikan.');
+        }
+
+        $eventUjian->update(['status' => 'selesai']);
+        return back()->with('success', 'Ujian telah berhasil diselesaikan.');
+    }
+
     // token
     public function releaseToken(EventUjian $eventUjian)
     {

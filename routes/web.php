@@ -57,9 +57,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/sesiujian', 'sesiujian')->name('admin.sesiujian');
             Route::get('/eventujian', 'eventujian')->name('admin.eventujian');
             Route::post('/create_eventujian', 'store')->name('event.create');
-            Route::patch('/token_eventujian', 'releaseToken')->name('event.token');
-            Route::patch('/aktifkan_eventujian', 'aktifkanUjian')->name('event.aktifkan_ujian');
-            Route::delete('/hapus_eventujian', 'destroy')->name('event.hapus');
+
+            // memulai ujian
+            Route::patch('/token_eventujian/{eventUjian}', 'releaseToken')->name('event.token');
+            Route::patch('/aktifkan_eventujian/{eventUjian}', 'aktifkanUjian')->name('event.aktifkan_ujian');
+            Route::patch('/eventujian_nonaktif/{eventUjian}', 'selesaikanUjian')->name('event.selesai_ujian');
+            Route::delete('/hapus_eventujian/{eventUjian}', 'destroy')->name('event.hapus');
 
         });
 
