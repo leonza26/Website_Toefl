@@ -19,7 +19,7 @@
                 <p class="text-muted small mb-0">Ubah detail pertanyaan dan pilihan jawaban di bawah ini.</p>
             </div>
         </div>
-        
+
         @if ($errors->any())
         <div class="alert alert-danger">
             <h6 class="fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terjadi Kesalahan:</h6>
@@ -33,7 +33,7 @@
 
         <div class="card shadow-sm border-0">
             {{-- NOTE: Arahkan action form ini ke route untuk mengupdate soal --}}
-            <form action="{{ route('admin.updatesoal', $soal->id ) }}" method="POST">
+            <form action="{{ route('admin.updatesoal', $soal->id ) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -49,6 +49,24 @@
                             placeholder="Masukkan teks pertanyaan di sini..."
                             required>{{ old('question_text', $soal->pertanyaan) }}</textarea>
                     </div>
+
+                    @if ($bank_soal->jenis_materi == 'Istimaq' || $bank_soal->jenis_materi == 'Listening')
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">File Audio (MP3)</label>
+
+                        @if ($soal->file)
+                        <p class="text-muted small">File saat ini:</p>
+                        <audio controls class="mb-2" style="width: 100%;">
+                            <source src="{{ asset('storage/' . $soal->file) }}" type="audio/mpeg">
+                            Browser Anda tidak mendukung pemutar audio.
+                        </audio>
+                        @endif
+
+                        {{-- Input untuk upload baru --}}
+                        <input type="file" class="form-control" name="file" accept="audio/mp3,audio/mpeg">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti file.</small>
+                    </div>
+                    @endif
 
                     {{-- Input untuk Pilihan Jawaban --}}
                     <div class="mb-3">

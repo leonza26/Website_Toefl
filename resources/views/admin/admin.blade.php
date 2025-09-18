@@ -24,7 +24,7 @@
                 <div class="fs-2 text-success me-3"><i class="bi bi-bank"></i></div>
                 <div>
                     <h5 class="card-title fw-semibold mb-0">Bank Soal</h5>
-                    <p class="fs-4 fw-semibold mb-0">875</p>
+                    <p class="fs-4 fw-semibold mb-0">{{ $bank_soal }}</p>
                 </div>
             </div>
         </div>

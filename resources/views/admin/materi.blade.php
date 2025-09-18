@@ -32,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($materis as $index => $materi)
+                            @forelse($materis as $index => $materi)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $materi->jenis_bahasa }}</td>
@@ -48,7 +48,13 @@
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    Belum Ada Materi
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

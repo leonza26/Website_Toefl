@@ -16,8 +16,9 @@ class AdminMainController extends Controller
     public function admin()
     {
         $mahasiswa = User::where('role', 1)->count();
+        $bank_soal = BankSoal::count();
 
-        return view('admin.admin', compact('mahasiswa'));
+        return view('admin.admin', compact('mahasiswa', 'bank_soal'));
     }
 
     // manage user
@@ -139,12 +140,18 @@ class AdminMainController extends Controller
 
         $validate_data = $request->validate([
             'pertanyaan' => 'required',
+            'file' => 'nullable|mimes:mp3|max:3072',
             'a' => 'required|string|max:255',
             'b' => 'required|string|max:255',
             'c' => 'required|string|max:255',
             'd' => 'required|string|max:255',
             'jawaban_benar' => 'required|string|max:255',
         ]);
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('audio_files', 'public');
+            $validate_data['file'] = $path;
+        }
 
         $validate_data['bank_soal_id'] = $bank_soal->id;
 
@@ -156,14 +163,21 @@ class AdminMainController extends Controller
     public function editsoal($id)
     {
         $soal = Soal::where('id', $id)->firstOrFail();
+        $bank_soal = $soal->bankSoal;
 
-        return view('admin.BankSoal.editsoal', compact('soal'));
+        return view('admin.BankSoal.editsoal', compact('soal', 'bank_soal'));
     }
 
     public function updatesoal(Request $request, $id)
     {
+        
+        $soal = Soal::findOrFail($id);
+
+        // dd($soal->file, Storage::disk('public')->exists($soal->file));
+
         $validate_data = $request->validate([
             'pertanyaan' => 'required',
+            'file' => 'nullable|mimes:mp3|max:3072',
             'a' => 'required|string|max:255',
             'b' => 'required|string|max:255',
             'c' => 'required|string|max:255',
@@ -171,7 +185,14 @@ class AdminMainController extends Controller
             'jawaban_benar' => 'required|string|max:255',
         ]);
 
-        $soal = Soal::findOrFail($id);
+        if ($request->hasFile('file')) {
+            if ($soal->file && Storage::disk('public')->exists($soal->file)) {
+                Storage::disk('public')->delete($soal->file);
+            }
+            $path = $request->file('file')->store('audio_files', 'public');
+            $validate_data['file'] = $path;
+        }
+
         $soal->update($validate_data);
 
         return redirect()->route('admin.banksoal')->with('success', 'Soal berhasil ditambahkan!');
