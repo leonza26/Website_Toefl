@@ -77,10 +77,10 @@
 
     <section id="hero" class="d-flex align-items-center text-center">
         <div class="container">
-            <h1 class="display-3 fw-bold text-white">Pusat Tes TOEFL dan TOAFL</h1>
+            <h1 class="display-3 fw-bold text-white">Simulasi Tes TOEFL dan TOAFL</h1>
             <p class="lead text-white-200 my-4">Selamat datang di aplikasi materi dan simulasi ujian TOEFL dan
                 TOAFL<br>Unit Pengembangan Bahasa UIN Sjech M. Djamil Djambek Bukittinggi.</p>
-            <a href="#cta" class="btn btn-primary btn-lg">Ambil Tes Penempatan</a>
+
         </div>
     </section>
 
@@ -184,7 +184,7 @@
                 <h2 class="display-5 fw-bold">Siap Mengukur Kemampuan Anda?</h2>
                 <p class="my-4">Login menggunakan akun mahasiswa Anda untuk memulai tes simulasi yang dijadwalkan.
                 </p>
-                <a href="#" class="btn btn-light btn-lg">Login dengan Akun Kampus</a>
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg">Login dengan Akun Kampus</a>
             </div>
         </section>
     </main>

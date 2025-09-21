@@ -21,23 +21,42 @@
                     </div>
                 </div>
                 <div class="card-body">
+
                     <!-- Search and Filter -->
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Cari judul bank soal...">
-                                <button class="btn btn-outline-secondary" type="button"><i
-                                        class="bi bi-search"></i></button>
-                            </div>
+                            <form method="GET" action="{{ route('admin.banksoal') }}">
+                                <div class="input-group">
+                                    <input type="text" name="search" value="{{ request('search') }}"
+                                        class="form-control" placeholder="Cari judul bank soal...">
+                                    <button class="btn btn-outline-secondary" type="submit"><i
+                                            class="bi bi-search"></i></button>
+                                </div>
+                            </form>
                         </div>
+
                         <div class="col-md-4">
-                            <select class="form-select">
-                                <option selected>Filter berdasarkan materi...</option>
-                                <option value="1">Listening Comprehension</option>
-                                <option value="2">Structure and Written Expression</option>
-                                <option value="3">Reading Comprehension</option>
-                            </select>
+                            <form method="GET" action="{{ route('admin.banksoal') }}">
+                                <select class="form-select" name="materi" onchange="this.form.submit()">
+                                    <option value="">Filter berdasarkan materi...</option>
+                                    <option value="Reading"
+                                        {{ request('materi') == 'Reading' ? 'selected' : '' }}>Reading</option>
+                                    <option value="Listening"
+                                        {{ request('materi') == 'Listening' ? 'selected' : '' }}>
+                                        Listening</option>
+                                    <option value="Structure"
+                                        {{ request('materi') == 'Structure' ? 'selected' : '' }}>Structure</option>
+                                        <option value="Istimaq"
+                                        {{ request('materi') == 'Istimaq' ? 'selected' : '' }}>Istimaq</option>
+                                    <option value="Qoriah"
+                                        {{ request('materi') == 'Qoriah' ? 'selected' : '' }}>
+                                        Qoriah</option>
+                                    <option value="Qowait"
+                                        {{ request('materi') == 'Qowait' ? 'selected' : '' }}>Qowait</option>
+                                </select>
+                            </form>
                         </div>
+
                     </div>
 
                     @if ($errors->any())
@@ -78,10 +97,12 @@
                                         <td>{{ $bank_soal->jenis_materi }}</td>
                                         <td>{{ $bank_soal->nama_banksoal }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.kelolasoal', $bank_soal->id) }}" class="btn btn-sm btn-primary"
-                                                title="Kelola Soal"><i class="bi bi-card-list"></i> Kelola Soal</a>
-                                            <a href="{{ route('admin.lihatsoal', $bank_soal->id) }}" class="btn btn-sm btn-primary"
-                                                title="Kelola Soal"><i class="bi bi-eye"></i> Lihat Soal</a>
+                                            <a href="{{ route('admin.kelolasoal', $bank_soal->id) }}"
+                                                class="btn btn-sm btn-primary" title="Kelola Soal"><i
+                                                    class="bi bi-card-list"></i> Kelola Soal</a>
+                                            <a href="{{ route('admin.lihatsoal', $bank_soal->id) }}"
+                                                class="btn btn-sm btn-primary" title="Kelola Soal"><i class="bi bi-eye"></i>
+                                                Lihat Soal</a>
                                         </td>
                                     </tr>
                                 @endforeach

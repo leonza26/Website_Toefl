@@ -5,7 +5,6 @@
 
 @section('content')
 
-    {{-- Style kustom untuk mencegah teks di tabel terpotong --}}
     <style>
         .table-nowrap th,
         .table-nowrap td {
@@ -59,7 +58,7 @@
                                     <tr>
                                         <td class="fw-semibold">{{ $event->judul }}</td>
                                         <td>{{ $event->bankSoal->nama_banksoal ?? 'N/A' }}</td>
-                                        <td>{{ $event->waktu_ujian }}</td>
+                                        <td>{{ $event->waktu_ujian }} menit</td>
                                         <td>{{ \Carbon\Carbon::parse($event->tanggal_ujian)->format('d M Y') }}</td>
                                         <td>
                                             @switch($event->status)
@@ -94,7 +93,7 @@
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit"
-                                                            class="btn btn-success btn-sm">Aktifkan</button>
+                                                            class="btn btn-success btn-sm" @if($adaUjianAktif) disabled @endif>Aktifkan</button>
                                                     </form>
                                                     <button class="btn btn-info btn-sm" disabled>Release Token</button>
                                                 @elseif($event->status == 'aktif')

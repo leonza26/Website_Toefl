@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\User;
-use App\Models\Materi;
-use App\Models\BankSoal;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\BankSoal;
+use App\Models\Materi;
 use App\Models\Soal;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AdminMainController extends Controller
@@ -22,19 +22,35 @@ class AdminMainController extends Controller
     }
 
     // manage user
-    public function manageuser()
+    public function manageuser(Request $request)
     {
-        $admins = User::where('role', '0')->get();
-        $users = User::where('role', '1')->get();
+        $search = $request->input('search');
 
-        return view('admin.manage', compact('admins', 'users'));
+        $query = User::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+
+                if (strtolower($search) === 'admin') {
+                    $q->orWhere('role', '=', 0);
+                } elseif (strtolower($search) === 'participant' || strtolower($search) === 'user') {
+                    $q->orWhere('role', '=', 1);
+                }
+            });
+        }
+
+        $users = $query->latest()->paginate(10);
+
+        return view('admin.manage', compact('users', 'search'));
     }
-
 
     // materi
     public function materi()
     {
-        $materis = Materi::all();
+        $materis = Materi::latest()->get();
 
         return view('admin.materi', compact('materis'));
     }
@@ -65,6 +81,7 @@ class AdminMainController extends Controller
             'jenis_materi' => $request->jenisMateri,
             'materi' => $path,
         ]);
+
         return redirect()->route('admin.materi');
     }
 
@@ -79,13 +96,33 @@ class AdminMainController extends Controller
 
         $materi->delete();
 
-        return redirect()->route('admin.materi')->with('success', 'Materi berhasil dihapus!');
+        return redirect()->routwhate('admin.materi')->with('success', 'Materi berhasil dihapus!');
     }
 
     // bank soal
-    public function banksoal()
+    public function banksoal(Request $request)
     {
-        $bank_soals = BankSoal::all();
+        $search = $request->input('search');
+        $materi = $request->input('materi');
+
+        // kolom yang dicari
+        $columns = ['jenis_bahasa', 'jenis_materi', 'nama_banksoal'];
+
+        // Query dengan filter search
+        $bank_soals = BankSoal::when($search, function ($query, $search) use ($columns) {
+            $query->where(function ($q) use ($search, $columns) {
+                foreach ($columns as $col) {
+                    $q->orWhere($col, 'like', "%{$search}%");
+                }
+            });
+        })
+            ->when($materi, function ($query, $materi) {
+                $query->where('jenis_materi', $materi); // pastikan ada kolom `materi` di tabel
+
+            })
+
+            ->latest()
+            ->get();
 
         return view('admin.BankSoal.banksoal', compact('bank_soals'));
     }
@@ -170,7 +207,7 @@ class AdminMainController extends Controller
 
     public function updatesoal(Request $request, $id)
     {
-        
+
         $soal = Soal::findOrFail($id);
 
         // dd($soal->file, Storage::disk('public')->exists($soal->file));
@@ -206,7 +243,6 @@ class AdminMainController extends Controller
 
         return redirect()->route('admin.banksoal')->with('success', 'Materi berhasil dihapus!');
     }
-
 
     // hasil tes
     public function hasiltes()

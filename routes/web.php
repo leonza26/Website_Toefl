@@ -20,8 +20,11 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::controller(AdminMainController::class)->group(function () {
+
+            // user control
             Route::get('/dashboard', 'admin')->name('admin');
             Route::get('/manage', 'manageuser')->name('admin.manage');
+
 
             // materi
             Route::get('/materi', 'materi')->name('admin.materi');
@@ -46,7 +49,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::put('/updatesoal/{id}', 'updatesoal')->name('admin.updatesoal');
             Route::delete('/hapussoal/{id}', 'hapussoal')->name('admin.hapussoal');
 
-            // setting ujian
 
 
             // hasil tes

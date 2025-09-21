@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\BankSoal;
 use App\Models\EventUjian;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class EventUjianController extends Controller
 {
-
     // event
     public function eventujian()
     {
         $events = EventUjian::with('bankSoal')->latest()->get();
+
         return view('admin.Ujian.eventujian', compact('events'));
     }
 
@@ -22,9 +22,9 @@ class EventUjianController extends Controller
     public function sesiujian()
     {
         $bankSoals = BankSoal::all();
+
         return view('admin.Ujian.sesiujian', compact('bankSoals'));
     }
-
 
     // buat sesi ujian
     public function store(Request $request)
@@ -45,15 +45,14 @@ class EventUjianController extends Controller
             'tanggal_ujian' => $validated['tanggal_ujian'],
         ]);
 
-
         return redirect()->route('admin.eventujian')->with('success', 'Event Ujian berhasil dibuat!');
     }
-
 
     // aktifkan ujian
     public function aktifkanUjian(EventUjian $eventUjian)
     {
         $eventUjian->update(['status' => 'aktif']);
+
         return back()->with('success', 'Ujian berhasil diaktifkan.');
     }
 
@@ -66,6 +65,7 @@ class EventUjianController extends Controller
         }
 
         $eventUjian->update(['status' => 'selesai']);
+
         return back()->with('success', 'Ujian telah berhasil diselesaikan.');
     }
 
@@ -73,16 +73,19 @@ class EventUjianController extends Controller
     public function releaseToken(EventUjian $eventUjian)
     {
         // token acak 6 karakter
+
+        // $token = strtoupper(Str::random(4) . rand(100, 999));  -> token angka
         $token = Str::upper(Str::random(6));
         $eventUjian->update(['token' => $token]);
-        return back()->with('success', 'Token berhasil dirilis: ' . $token);
+
+        return back()->with('success', 'Token berhasil dirilis: '.$token);
     }
 
     // hapus event
     public function destroy(EventUjian $eventUjian)
     {
         $eventUjian->delete();
+
         return back()->with('success', 'Event ujian berhasil dihapus.');
     }
-
 }
