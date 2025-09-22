@@ -9,7 +9,7 @@ class PilihanJawaban extends Model
 {
     //
 
-     use HasFactory;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +18,7 @@ class PilihanJawaban extends Model
      */
     protected $fillable = [
         'soal_id',
+        'user_id',
         'opsi',
         'is_benar',
     ];
@@ -29,5 +30,4 @@ class PilihanJawaban extends Model
     {
         return $this->belongsTo(Soal::class);
     }
-
 }

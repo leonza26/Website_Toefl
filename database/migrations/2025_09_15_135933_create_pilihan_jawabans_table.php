@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('pilihan_jawabans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('soal_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             // untuk menyimpan pilihan jawaban
-            $table->text('opsi');
+            $table->string('opsi');
+            $table->boolean('ragu_ragu')->default(false);   
             // boolean untuk menandai apakah ini jawaban yang benar atau tidak
             $table->boolean('is_benar')->default(false);
             $table->timestamps();
