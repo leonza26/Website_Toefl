@@ -12,6 +12,7 @@
         }
     </style>
 
+{{-- @php dd(get_defined_vars()); @endphp --}}
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -93,7 +94,9 @@
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit"
-                                                            class="btn btn-success btn-sm" @if($adaUjianAktif) disabled @endif>Aktifkan</button>
+                                                            class="btn btn-success btn-sm" @if ($UjianAktif)
+                                                                disabled
+                                                            @endif>Aktifkan</button>
                                                     </form>
                                                     <button class="btn btn-info btn-sm" disabled>Release Token</button>
                                                 @elseif($event->status == 'aktif')

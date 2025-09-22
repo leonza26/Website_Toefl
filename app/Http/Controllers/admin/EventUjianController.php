@@ -2,29 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\BankSoal;
 use App\Models\EventUjian;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EventUjianController extends Controller
 {
+
     // event
     public function eventujian()
     {
         $events = EventUjian::with('bankSoal')->latest()->get();
 
-        return view('admin.Ujian.eventujian', compact('events'));
+        $UjianAktif = EventUjian::where('status', 'aktif')->exists();
+
+        return view('admin.Ujian.eventujian', compact('events', 'UjianAktif'));
     }
 
     // sesi
     public function sesiujian()
     {
         $bankSoals = BankSoal::all();
-
         return view('admin.Ujian.sesiujian', compact('bankSoals'));
     }
+
 
     // buat sesi ujian
     public function store(Request $request)
@@ -45,15 +48,25 @@ class EventUjianController extends Controller
             'tanggal_ujian' => $validated['tanggal_ujian'],
         ]);
 
+
         return redirect()->route('admin.eventujian')->with('success', 'Event Ujian berhasil dibuat!');
     }
+
 
     // aktifkan ujian
     public function aktifkanUjian(EventUjian $eventUjian)
     {
-        $eventUjian->update(['status' => 'aktif']);
+        // Cek
+        $ujianAktifLain = EventUjian::where('status', 'aktif')->where('id', '!=', $eventUjian->id)->exists();
 
-        return back()->with('success', 'Ujian berhasil diaktifkan.');
+        if ($ujianAktifLain) {
+            // Jika ada yang aktif, TOLAK
+            return back()->with('error', 'Gagal! Sudah ada ujian lain yang sedang aktif.');
+        }
+
+        $eventUjian->update(['status' => 'aktif']);
+        return redirect()->route('admin.eventujian')
+        ->with('success', 'Ujian berhasil diaktifkan.');
     }
 
     // selesaikan paksa ujian
@@ -61,12 +74,11 @@ class EventUjianController extends Controller
     {
         //  hanya ujian yang aktif yang bisa diselesaikan
         if ($eventUjian->status !== 'aktif') {
-            return back()->with('error', 'Hanya ujian yang aktif yang bisa diselesaikan.');
+            return redirect()->route('admin.eventujian')->with('error', 'Hanya ujian yang aktif yang bisa diselesaikan.');
         }
 
         $eventUjian->update(['status' => 'selesai']);
-
-        return back()->with('success', 'Ujian telah berhasil diselesaikan.');
+        return redirect()->route('admin.eventujian')->with('success', 'Ujian telah berhasil diselesaikan.');
     }
 
     // token
@@ -77,15 +89,14 @@ class EventUjianController extends Controller
         // $token = strtoupper(Str::random(4) . rand(100, 999));  -> token angka
         $token = Str::upper(Str::random(6));
         $eventUjian->update(['token' => $token]);
-
-        return back()->with('success', 'Token berhasil dirilis: '.$token);
+        return redirect()->route('admin.eventujian')->with('success', 'Token berhasil dirilis: ' . $token);
     }
 
     // hapus event
     public function destroy(EventUjian $eventUjian)
     {
         $eventUjian->delete();
-
-        return back()->with('success', 'Event ujian berhasil dihapus.');
+        return redirect()->route('admin.eventujian')->with('success', 'Event ujian berhasil dihapus.');
     }
+
 }
