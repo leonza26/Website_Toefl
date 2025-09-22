@@ -24,7 +24,7 @@
                         </thead>
                         <tbody>
 
-                            @foreach($materis as $index => $materi)
+                            @forelse($materis as $index => $materi)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $materi->jenis_bahasa }}</td>
@@ -33,7 +33,13 @@
                                     <a href="{{ asset('storage/' . $materi->materi)  }}" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    Belum Ada Materi
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

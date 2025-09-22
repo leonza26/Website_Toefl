@@ -81,7 +81,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
             Route::get('/dashboard', 'index')->name('participant');
             Route::get('/materi', 'materi')->name('participant.materi');
             Route::get('/simulasi', 'simulasi')->name('participant.simulasi');
-            Route::get('/ujian', 'ujian')->name('participant.ujian');
+            Route::get('/ujian/{id}', 'ujian')->name('participant.ujian');
         });
     });
 });
