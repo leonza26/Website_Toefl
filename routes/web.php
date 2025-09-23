@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\admin\AdminMainController;
 use App\Http\Controllers\Admin\EventUjianController;
+use App\Http\Controllers\Participant\UjianProsesController;
 use App\Http\Controllers\Participant\ParticipantMainController;
 
 Route::get('/', function () {
@@ -81,7 +82,18 @@ Route::middleware(['auth', 'verified', 'rolemanager:participant'])->group(functi
             Route::get('/dashboard', 'index')->name('participant');
             Route::get('/materi', 'materi')->name('participant.materi');
             Route::get('/simulasi', 'simulasi')->name('participant.simulasi');
-            Route::get('/ujian/{id}', 'ujian')->name('participant.ujian');
+
+            // konfirmasi ujian
+            Route::post('/ujian/start/{eventUjian}', 'startUjian')->name('participant.ujian.start');
+            Route::get('/ujian/show/{ujianPeserta}', 'showUjianPage')->name('participant.ujian.show');
+        });
+
+
+        Route::controller(UjianProsesController::class)->group(function () {
+            Route::get('/ujian/soal/{ujianPeserta}', 'muatSoal')->name('participant.ujian.muat_soal');
+            Route::post('/ujian/simpan', 'simpanJawaban')->name('participant.ujian.simpan_jawaban');
+            Route::post('/ujian/selesaikan', 'selesaikanUjian')->name('participant.ujian.selesaikan');
+
         });
     });
 });

@@ -4,191 +4,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujian Berlangsung - Tes Penempatan Awal</title>
+    {{-- PENTING: CSRF Token untuk keamanan AJAX --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Ujian Berlangsung - {{ $eventUjian->judul }}</title>
 
     <!-- Dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-        }
-
-        .test-header {
-            background-color: #0d1b2a;
-            color: white;
-        }
-
-        .timer-box {
-            background-color: #ffc107;
-            color: #000;
-            font-weight: 600;
-            border-radius: .25rem;
-        }
-
-        .question-panel {
-            background-color: white;
-            border-radius: .5rem;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .navigation-panel {
-            position: sticky;
-            top: 20px;
-        }
-
-        .nav-question-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-            gap: 10px;
-        }
-
-        .nav-question-btn {
-            width: 40px;
-            height: 40px;
-        }
-
-        .nav-question-btn.answered {
-            background-color: #198754;
-            color: white;
-            border-color: #198754;
-        }
-
-        .nav-question-btn.doubtful {
-            background-color: #ffc107;
-            color: #000;
-            border-color: #ffc107;
-        }
-
-        .nav-question-btn.current {
-            background-color: #0d6efd;
-            color: white;
-            border-color: #0d6efd;
-        }
-
-        .reading-passage {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #dee2e6;
-            padding: 15px;
-            border-radius: .25rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/sesiujian.css') }}">
 </head>
 
 <body>
     <header class="test-header py-3 shadow-sm">
         <div class="container d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold">Tes Penempatan Awal - Reading Section</h5>
+            <h5 class="mb-0 fw-semibold">{{ $eventUjian->judul }}</h5>
             <div class="timer-box px-3 py-1 fs-5">
                 <i class="bi bi-clock-fill"></i>
-                <span id="timer">20:00</span>
+                <span id="timer">--:--</span>
             </div>
         </div>
     </header>
-
     <main class="container py-4">
-        <div class="row g-4">
-            <!-- Kolom Soal -->
-            <div class="col-lg-8">
-                <div class="question-panel p-4">
-                    <h6 class="text-muted">Pertanyaan 1 dari 50</h6>
-                    <hr>
-                    <div class="reading-passage mb-3">
-                        <p><strong>Reading Passage:</strong></p>
-                        <p>The term "biodiversity" is a contraction of "biological diversity" and refers to the variety of life forms on Earth. This includes the diversity of species, the genetic diversity within those species, and the diversity of ecosystems they form. The concept gained widespread recognition after the 1992 Earth Summit in Rio de Janeiro. Preserving biodiversity is crucial for many reasons. Ecosystems with a high degree of biodiversity are more resilient to disturbances and can provide essential "ecosystem services," such as clean water, pollination of crops, and climate regulation.</p>
-                        <p>However, biodiversity is currently facing unprecedented threats from human activities. Habitat destruction, pollution, climate change, and the introduction of invasive species are the primary drivers of biodiversity loss. Scientists estimate that species are going extinct at a rate hundreds of times higher than the natural background rate. This loss diminishes nature's ability to provide the services we depend on and reduces its aesthetic and cultural value.</p>
+        <form id="ujianForm" method="POST" action="{{ route('participant.ujian.selesaikan') }}">
+            @csrf
+            <input type="hidden" name="ujian_peserta_id" id="ujian_peserta_id" value="{{ $ujianPeserta->id }}">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div id="question-container" class="question-panel p-4">
+                        <div class="text-center p-5">
+                            <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="fw-semibold">1. What is the primary focus of the passage?</p>
-                    <div class="list-group">
-                        <label class="list-group-item">
-                            <input class="form-check-input me-2" type="radio" name="question1" value="A"> The history of the Earth Summit.
-                        </label>
-                        <label class="list-group-item">
-                            <input class="form-check-input me-2" type="radio" name="question1" value="B"> The definition, importance, and threats to biodiversity.
-                        </label>
-                        <label class="list-group-item">
-                            <input class="form-check-input me-2" type="radio" name="question1" value="C"> The economic benefits of ecosystem services.
-                        </label>
-                        <label class="list-group-item">
-                            <input class="form-check-input me-2" type="radio" name="question1" value="D"> An analysis of invasive species.
-                        </label>
-                    </div>
-                    <!-- DIREVISI: Tombol navigasi soal diperbarui -->
-                    <div class="d-flex justify-content-between mt-4">
-                        <button class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Sebelumnya</button>
-                        <button class="btn btn-warning"><i class="bi bi-flag-fill"></i> Ragu-ragu</button>
-                        <button class="btn btn-primary">Selanjutnya & Simpan <i class="bi bi-arrow-right"></i></button>
+                </div>
+                <div class="col-lg-4">
+                    <div class="question-panel p-4 navigation-panel">
+                        <h6 class="fw-semibold text-center">Navigasi Soal</h6>
+                        <hr>
+                        <div id="nav-question-grid" class="nav-question-grid"></div>
+                        <div class="d-flex align-items-center justify-content-center small text-muted mt-3">
+                            <span class="badge bg-success me-1">&nbsp;</span> Dijawab
+                            <span class="badge bg-warning mx-2">&nbsp;</span> Ragu-ragu
+                        </div>
+                        <div class="d-grid mt-3">
+                            <button type="button" id="btnSelesaikan" class="btn btn-success" disabled>
+                                <i class="bi bi-check-circle-fill me-2"></i>Selesaikan Ujian
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Kolom Navigasi Soal -->
-            <div class="col-lg-4">
-                <div class="question-panel p-4 navigation-panel">
-                    <h6 class="fw-semibold text-center">Navigasi Soal</h6>
-                    <hr>
-                    <div class="nav-question-grid">
-                        <!-- Contoh Navigasi dengan status ragu-ragu -->
-                        <button class="btn btn-outline-secondary nav-question-btn current">1</button>
-                        <button class="btn btn-outline-secondary nav-question-btn doubtful">2</button>
-                        <button class="btn btn-outline-secondary nav-question-btn answered">3</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">4</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">5</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">6</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">7</button>
-                        <button class="btn btn-outline-secondary nav-question-btn answered">8</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">9</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">10</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">11</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">12</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">13</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">14</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">15</button>
-                        <button class="btn btn-outline-secondary nav-question-btn">16</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">17</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">18</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">19</button>
-                        <button class="btn btn-outline-secondary nav-question-btn current">20</button>
-
-
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center small text-muted mt-3">
-                        <span class="badge bg-success me-1">&nbsp;</span> Dijawab
-                        <span class="badge bg-warning mx-2">&nbsp;</span> Ragu-ragu
-                    </div>
-                    <div class="d-grid mt-3">
-                        <button class="btn btn-success"><i class="bi bi-check-circle-fill me-2"></i>Selesaikan Ujian</button>
-                    </div>
+        </form>
+    </main>
+    <!-- Modal -->
+    <div class="modal fade" id="konfirmasiModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Selesaikan Ujian</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
                 </div>
+                <div class="modal-body">
+                    <p>Anda telah menjawab <strong id="jawabanTerkumpul">0</strong> dari <strong
+                            id="totalSoalModal">0</strong> soal.</p>
+                    <p>Apakah Anda yakin ingin mengakhiri sesi ujian ini?</p>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Batal</button><button type="button" id="btnSubmitFinal"
+                        class="btn btn-success">Ya, Selesaikan</button></div>
             </div>
         </div>
-    </main>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const timerDisplay = document.getElementById('timer');
-            let timeLeft = 20 * 60; // 20 menit dalam detik
+        let sisaWaktu = {{ $sisaWaktu }};
+        const ujianPesertaId = document.getElementById('ujian_peserta_id').value;
+        const totalSoal = {{ $totalSoal }};
+        let soalSaatIni = null;
+        let jawabanPeserta = {};
+        let isLoading = false; // Flag untuk mencegah klik ganda
+        const timerDisplay = document.getElementById('timer');
+        const questionContainer = document.getElementById('question-container');
+        const navGrid = document.getElementById('nav-question-grid');
+        const btnSelesaikan = document.getElementById('btnSelesaikan');
+        const konfirmasiModal = new bootstrap.Modal(document.getElementById('konfirmasiModal'));
 
-            const timerInterval = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
+        function muatSoal(nomorSoal) {
+            if (isLoading) return;
+            isLoading = true;
+            questionContainer.innerHTML = `<div class="text-center p-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>`;
+            const url = `{{ route('participant.ujian.muat_soal', ['ujianPeserta' => ':id']) }}`.replace(':id', ujianPesertaId);
+            fetch(`${url}?nomor=${nomorSoal}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => { if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); return response.json(); })
+                .then(data => {
+                    soalSaatIni = data.soal;
+                    Object.assign(jawabanPeserta, data.jawaban_peserta);
+                    renderSoal();
+                    renderNavigasi();
+                    updateStatusPenyelesaian();
+                }).catch(error => {
+                    console.error('Fetch error:', error);
+                    questionContainer.innerHTML = `<div class="alert alert-danger">Gagal memuat soal. Silakan periksa koneksi atau coba refresh halaman.</div>`;
+                }).finally(() => {
+                    isLoading = false;
+                });
+        }
 
-                timerDisplay.textContent = `${minutes}:${seconds}`;
-                timeLeft--;
+        function renderSoal() {
+            let pilihanHTML = '';
+            const opsi = ['a', 'b', 'c', 'd'];
+            const jawabanTersimpan = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].jawaban : null;
+            opsi.forEach(opt => {
+                const isChecked = jawabanTersimpan === opt ? 'checked' : '';
+                pilihanHTML += `<label class="list-group-item"><input class="form-check-input me-2" type="radio" name="jawaban" value="${opt}" ${isChecked}> ${soalSaatIni[opt]}</label>`;
+            });
+            const isRagu = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].is_ragu : false;
+            questionContainer.innerHTML = `<h6 class="text-muted">Pertanyaan ${soalSaatIni.nomor} dari ${totalSoal}</h6><hr><div class="mb-3">${soalSaatIni.pertanyaan}</div><div class="list-group">${pilihanHTML}</div><div class="d-flex justify-content-between mt-4"><button type="button" class="btn btn-outline-secondary ${soalSaatIni.nomor === 1 ? 'disabled-button' : ''}" onclick="navigasi(-1)"><i class="bi bi-arrow-left"></i> Sebelumnya</button><button type="button" class="btn ${isRagu ? 'btn-danger' : 'btn-warning'}" onclick="tandaiRagu()"><i class="bi bi-flag-fill"></i> ${isRagu ? 'Hapus Tanda' : 'Ragu-ragu'}</button><button type="button" class="btn btn-primary" onclick="navigasi(1)">${soalSaatIni.nomor === totalSoal ? 'Selesaikan' : 'Selanjutnya'} <i class="bi bi-arrow-right"></i></button></div>`;
+        }
 
-                if (timeLeft < 0) {
-                    clearInterval(timerInterval);
-                    alert('Waktu ujian telah habis!');
-                    // Tambahkan logika untuk submit otomatis di sini
+        function renderNavigasi() {
+            navGrid.innerHTML = '';
+            for (let i = 1; i <= totalSoal; i++) {
+                let statusClass = '';
+                const soalData = Object.values(jawabanPeserta).find(item => item && item.nomor === i);
+                if (soalData) {
+                    if (soalData.is_ragu) statusClass = 'doubtful';
+                    else if (soalData.jawaban) statusClass = 'answered';
                 }
-            }, 1000);
+                if (soalSaatIni && i === soalSaatIni.nomor) statusClass += ' current';
+                navGrid.innerHTML += `<button type="button" class="btn btn-outline-secondary nav-question-btn ${statusClass}" onclick="muatSoal(${i})">${i}</button>`;
+            }
+        }
+
+        function simpanJawaban(jawaban, isRagu, callback) {
+            fetch(`{{ route('participant.ujian.simpan_jawaban') }}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
+                body: JSON.stringify({ ujian_peserta_id: ujianPesertaId, soal_id: soalSaatIni.id, jawaban: jawaban, is_ragu: isRagu })
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    jawabanPeserta[soalSaatIni.id] = { jawaban: jawaban, is_ragu: isRagu, nomor: soalSaatIni.nomor };
+                    renderNavigasi(); updateStatusPenyelesaian(); if (callback) callback();
+                }
+            });
+        }
+
+        function updateStatusPenyelesaian() {
+            const jawabanTersimpan = Object.values(jawabanPeserta).filter(j => j && j.jawaban).length;
+            btnSelesaikan.disabled = jawabanTersimpan !== totalSoal;
+        }
+
+        window.navigasi = function(arah) {
+            if (isLoading) return;
+            const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+            const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]?.jawaban || null);
+            const isRagu = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+
+            simpanJawaban(jawaban, isRagu, function() {
+                // ==========================================================
+                //           PERBAIKAN UTAMA ADA DI BARIS INI
+                // ==========================================================
+                // Menggunakan parseInt() untuk memastikan penjumlahan matematika
+                const nomorBerikutnya = parseInt(soalSaatIni.nomor) + arah;
+                // ==========================================================
+
+                if (nomorBerikutnya > 0 && nomorBerikutnya <= totalSoal) {
+                    muatSoal(nomorBerikutnya);
+                } else if (nomorBerikutnya > totalSoal) {
+                    btnSelesaikan.click();
+                }
+            });
+        };
+
+        window.tandaiRagu = function() {
+            if (isLoading) return;
+            const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+            const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]?.jawaban || null);
+            const isRaguSaatIni = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+            simpanJawaban(jawaban, !isRaguSaatIni, () => muatSoal(soalSaatIni.nomor));
+        };
+
+        btnSelesaikan.addEventListener('click', function() {
+            const jawabanTerkumpul = Object.values(jawabanPeserta).filter(j => j.jawaban).length;
+            document.getElementById('jawabanTerkumpul').textContent = jawabanTerkumpul;
+            document.getElementById('totalSoalModal').textContent = totalSoal;
+            konfirmasiModal.show();
         });
+
+        document.getElementById('btnSubmitFinal').addEventListener('click', () => document.getElementById('ujianForm').submit());
+
+        const timerInterval = setInterval(() => {
+            if (sisaWaktu < 0) {
+                clearInterval(timerInterval);
+                alert('Waktu ujian telah habis! Jawaban Anda akan dikirim secara otomatis.');
+                document.getElementById('ujianForm').submit();
+                return;
+            }
+            const minutes = Math.floor(sisaWaktu / 60);
+            let seconds = Math.floor(sisaWaktu % 60);
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.textContent = `${minutes}:${seconds}`;
+            sisaWaktu--;
+        }, 1000);
+
+        history.pushState(null, null, location.href);
+        window.onpopstate = () => history.go(1);
+        muatSoal({{ $nomorSoal }});
+    });
     </script>
+
 </body>
 
 </html>
