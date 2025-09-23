@@ -47,6 +47,15 @@ class AdminMainController extends Controller
         return view('admin.manage', compact('users', 'search'));
     }
 
+    public function destroyuser($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->route('admin.manage')->with('success', 'User berhasil dihapus!');
+    }
+
     // materi
     public function materi()
     {

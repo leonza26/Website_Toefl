@@ -31,6 +31,11 @@ class DatabaseSeeder extends Seeder
             'password' => 'ibad123',
         ]);
 
+        User::factory()->count(15)->create([
+            'password' => bcrypt('password123'),
+            'role' => 1,
+        ]);
+
         BankSoal::create([
             'jenis_bahasa' => 'English',
             'jenis_materi' => 'Reading',
