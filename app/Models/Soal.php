@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Soal extends Model
@@ -39,5 +40,17 @@ class Soal extends Model
     public function pilihanJawabans()
     {
         return $this->hasMany(PilihanJawaban::class);
+    }
+
+
+    public function getFileUrlAttribute()
+    {
+        // Cek apakah ada file yang tersimpan di kolom 'file'
+        if ($this->file) {
+            // Jika ada, kembalikan URL publiknya dari storage
+            return Storage::url($this->file);
+        }
+        // Jika tidak ada file, kembalikan null
+        return null;
     }
 }

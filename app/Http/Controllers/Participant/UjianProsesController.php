@@ -36,8 +36,8 @@
 
             $soal->nomor = $nomorSoal;
 
-            // --- PERBAIKAN DIMULAI DI SINI ---
-        // Ambil semua jawaban yang sudah disimpan peserta untuk sesi ini
+            $soal->append('file_url');
+
         $semuaJawaban = JawabanPeserta::where('ujian_peserta_id', $ujianPeserta->id)
             ->get(['soal_id', 'jawaban', 'is_ragu'])
             ->keyBy('soal_id');
@@ -62,9 +62,6 @@
             ]);
         }
 
-        /**
-         * Menyimpan jawaban peserta melalui AJAX.
-         */
         public function simpanJawaban(Request $request)
         {
             $validated = $request->validate([

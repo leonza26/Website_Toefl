@@ -81,140 +81,223 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        let sisaWaktu = {{ $sisaWaktu }};
-        const ujianPesertaId = document.getElementById('ujian_peserta_id').value;
-        const totalSoal = {{ $totalSoal }};
-        let soalSaatIni = null;
-        let jawabanPeserta = {};
-        let isLoading = false; // Flag untuk mencegah klik ganda
-        const timerDisplay = document.getElementById('timer');
-        const questionContainer = document.getElementById('question-container');
-        const navGrid = document.getElementById('nav-question-grid');
-        const btnSelesaikan = document.getElementById('btnSelesaikan');
-        const konfirmasiModal = new bootstrap.Modal(document.getElementById('konfirmasiModal'));
+            let sisaWaktu = {{ $sisaWaktu }};
+            const ujianPesertaId = document.getElementById('ujian_peserta_id').value;
+            const totalSoal = {{ $totalSoal }};
+            let soalSaatIni = null;
+            let jawabanPeserta = {};
+            let isLoading = false; // Flag untuk mencegah klik ganda
+            const timerDisplay = document.getElementById('timer');
+            const questionContainer = document.getElementById('question-container');
+            const navGrid = document.getElementById('nav-question-grid');
+            const btnSelesaikan = document.getElementById('btnSelesaikan');
+            const konfirmasiModal = new bootstrap.Modal(document.getElementById('konfirmasiModal'));
 
-        function muatSoal(nomorSoal) {
-            if (isLoading) return;
-            isLoading = true;
-            questionContainer.innerHTML = `<div class="text-center p-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>`;
-            const url = `{{ route('participant.ujian.muat_soal', ['ujianPeserta' => ':id']) }}`.replace(':id', ujianPesertaId);
-            fetch(`${url}?nomor=${nomorSoal}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                .then(response => { if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); return response.json(); })
-                .then(data => {
-                    soalSaatIni = data.soal;
-                    Object.assign(jawabanPeserta, data.jawaban_peserta);
-                    renderSoal();
-                    renderNavigasi();
-                    updateStatusPenyelesaian();
-                }).catch(error => {
-                    console.error('Fetch error:', error);
-                    questionContainer.innerHTML = `<div class="alert alert-danger">Gagal memuat soal. Silakan periksa koneksi atau coba refresh halaman.</div>`;
-                }).finally(() => {
-                    isLoading = false;
+            function muatSoal(nomorSoal) {
+                if (isLoading) return;
+                isLoading = true;
+                questionContainer.innerHTML =
+                    `<div class="text-center p-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>`;
+                const url = `{{ route('participant.ujian.muat_soal', ['ujianPeserta' => ':id']) }}`.replace(':id',
+                    ujianPesertaId);
+                fetch(`${url}?nomor=${nomorSoal}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        soalSaatIni = data.soal;
+                        Object.assign(jawabanPeserta, data.jawaban_peserta);
+                        renderSoal();
+                        renderNavigasi();
+                        updateStatusPenyelesaian();
+                    }).catch(error => {
+                        console.error('Fetch error:', error);
+                        questionContainer.innerHTML =
+                            `<div class="alert alert-danger">Gagal memuat soal. Silakan periksa koneksi atau coba refresh halaman.</div>`;
+                    }).finally(() => {
+                        isLoading = false;
+                    });
+            }
+
+            function renderSoal() {
+                let audioHTML = '';
+                if (soalSaatIni.file_url) {
+                    audioHTML = `
+                        <div class="mb-3">
+                            <audio controls class="w-100">
+                                <source src="${soalSaatIni.file_url}" type="audio/mpeg">
+                                Browser Anda tidak mendukung elemen audio.
+                            </audio>
+                        </div>
+                    `;
+                }
+
+                let pilihanHTML = '';
+                const opsi = ['a', 'b', 'c', 'd'];
+                const jawabanTersimpan = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].jawaban :
+                    null;
+                opsi.forEach(opt => {
+                    const isChecked = jawabanTersimpan === opt ? 'checked' : '';
+                    pilihanHTML +=
+                        `<label class="list-group-item"><input class="form-check-input me-2" type="radio" name="jawaban" value="${opt}" ${isChecked}> ${soalSaatIni[opt]}</label>`;
                 });
-        }
 
-        function renderSoal() {
-            let pilihanHTML = '';
-            const opsi = ['a', 'b', 'c', 'd'];
-            const jawabanTersimpan = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].jawaban : null;
-            opsi.forEach(opt => {
-                const isChecked = jawabanTersimpan === opt ? 'checked' : '';
-                pilihanHTML += `<label class="list-group-item"><input class="form-check-input me-2" type="radio" name="jawaban" value="${opt}" ${isChecked}> ${soalSaatIni[opt]}</label>`;
-            });
-            const isRagu = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].is_ragu : false;
-            questionContainer.innerHTML = `<h6 class="text-muted">Pertanyaan ${soalSaatIni.nomor} dari ${totalSoal}</h6><hr><div class="mb-3">${soalSaatIni.pertanyaan}</div><div class="list-group">${pilihanHTML}</div><div class="d-flex justify-content-between mt-4"><button type="button" class="btn btn-outline-secondary ${soalSaatIni.nomor === 1 ? 'disabled-button' : ''}" onclick="navigasi(-1)"><i class="bi bi-arrow-left"></i> Sebelumnya</button><button type="button" class="btn ${isRagu ? 'btn-danger' : 'btn-warning'}" onclick="tandaiRagu()"><i class="bi bi-flag-fill"></i> ${isRagu ? 'Hapus Tanda' : 'Ragu-ragu'}</button><button type="button" class="btn btn-primary" onclick="navigasi(1)">${soalSaatIni.nomor === totalSoal ? 'Selesaikan' : 'Selanjutnya'} <i class="bi bi-arrow-right"></i></button></div>`;
-        }
+                const isRagu = jawabanPeserta[soalSaatIni.id] ? jawabanPeserta[soalSaatIni.id].is_ragu : false;
 
-        function renderNavigasi() {
-            navGrid.innerHTML = '';
-            for (let i = 1; i <= totalSoal; i++) {
-                let statusClass = '';
-                const soalData = Object.values(jawabanPeserta).find(item => item && item.nomor === i);
-                if (soalData) {
-                    if (soalData.is_ragu) statusClass = 'doubtful';
-                    else if (soalData.jawaban) statusClass = 'answered';
-                }
-                if (soalSaatIni && i === soalSaatIni.nomor) statusClass += ' current';
-                navGrid.innerHTML += `<button type="button" class="btn btn-outline-secondary nav-question-btn ${statusClass}" onclick="muatSoal(${i})">${i}</button>`;
+                // Masukkan variabel audioHTML ke dalam template
+                questionContainer.innerHTML = `
+                    <h6 class="text-muted">Pertanyaan ${soalSaatIni.nomor} dari ${totalSoal}</h6>
+                    <hr>
+                    ${audioHTML}
+                    <div class="mb-3">${soalSaatIni.pertanyaan}</div>
+                    <div class="list-group">${pilihanHTML}</div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-outline-secondary ${soalSaatIni.nomor === 1 ? 'disabled-button' : ''}" onclick="navigasi(-1)"><i class="bi bi-arrow-left"></i> Sebelumnya</button>
+                        <button type="button" class="btn ${isRagu ? 'btn-danger' : 'btn-warning'}" onclick="tandaiRagu()"><i class="bi bi-flag-fill"></i> ${isRagu ? 'Hapus Tanda' : 'Ragu-ragu'}</button>
+                        <button type="button" class="btn btn-primary" onclick="navigasi(1)">${soalSaatIni.nomor === totalSoal ? 'Selesaikan' : 'Selanjutnya'} <i class="bi bi-arrow-right"></i></button>
+                    </div>
+                `;
             }
-        }
 
-        function simpanJawaban(jawaban, isRagu, callback) {
-            fetch(`{{ route('participant.ujian.simpan_jawaban') }}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
-                body: JSON.stringify({ ujian_peserta_id: ujianPesertaId, soal_id: soalSaatIni.id, jawaban: jawaban, is_ragu: isRagu })
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    jawabanPeserta[soalSaatIni.id] = { jawaban: jawaban, is_ragu: isRagu, nomor: soalSaatIni.nomor };
-                    renderNavigasi(); updateStatusPenyelesaian(); if (callback) callback();
+            function renderNavigasi() {
+                navGrid.innerHTML = '';
+                for (let i = 1; i <= totalSoal; i++) {
+                    let statusClass = '';
+                    const soalData = Object.values(jawabanPeserta).find(item => item && item.nomor === i);
+                    if (soalData) {
+                        if (soalData.is_ragu) statusClass = 'doubtful';
+                        else if (soalData.jawaban) statusClass = 'answered';
+                    }
+                    if (soalSaatIni && i === soalSaatIni.nomor) statusClass += ' current';
+
+                    // PERBAIKAN 2: Menggunakan fungsi lompatKeSoal() yang baru
+                    navGrid.innerHTML +=
+                        `<button type="button" class="btn btn-outline-secondary nav-question-btn ${statusClass}" onclick="lompatKeSoal(${i})">${i}</button>`;
                 }
+            }
+
+            function simpanJawaban(jawaban, isRagu, callback) {
+                fetch(`{{ route('participant.ujian.simpan_jawaban') }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        ujian_peserta_id: ujianPesertaId,
+                        soal_id: soalSaatIni.id,
+                        jawaban: jawaban,
+                        is_ragu: isRagu
+                    })
+                }).then(response => response.json()).then(data => {
+                    if (data.success) {
+                        jawabanPeserta[soalSaatIni.id] = {
+                            jawaban: jawaban,
+                            is_ragu: isRagu,
+                            nomor: soalSaatIni.nomor
+                        };
+                        renderNavigasi();
+                        updateStatusPenyelesaian();
+                        if (callback) callback();
+                    }
+                });
+            }
+
+            function updateStatusPenyelesaian() {
+                const jawabanTersimpan = Object.values(jawabanPeserta).filter(j => j && j.jawaban).length;
+                btnSelesaikan.disabled = jawabanTersimpan !== totalSoal;
+            }
+
+            window.lompatKeSoal = function(nomorTujuan) {
+                // Jangan lakukan apa-apa jika sedang loading atau sudah di soal tujuan
+                if (isLoading || (soalSaatIni && soalSaatIni.nomor === nomorTujuan)) return;
+
+                const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+                const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]
+                    ?.jawaban || null);
+                const isRagu = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+
+                // Simpan jawaban saat ini dulu, baru lompat ke soal tujuan
+                simpanJawaban(jawaban, isRagu, function() {
+                    muatSoal(nomorTujuan);
+                });
+            };
+
+            window.navigasi = function(arah) {
+                if (isLoading) return;
+                const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+                const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]
+                    ?.jawaban || null);
+                const isRagu = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+
+                simpanJawaban(jawaban, isRagu, function() {
+                    const nomorBerikutnya = parseInt(soalSaatIni.nomor) + arah;
+                    if (nomorBerikutnya > 0 && nomorBerikutnya <= totalSoal) {
+                        muatSoal(nomorBerikutnya);
+                    } else if (nomorBerikutnya > totalSoal) {
+                        btnSelesaikan.click();
+                    }
+                });
+            };
+
+            window.tandaiRagu = function() {
+                if (isLoading) return;
+                const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+                const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]
+                    ?.jawaban || null);
+                const isRaguSaatIni = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+                simpanJawaban(jawaban, !isRaguSaatIni, () => muatSoal(soalSaatIni.nomor));
+            };
+
+
+
+            btnSelesaikan.addEventListener('click', function() {
+                if (isLoading) return; // Jangan lakukan apa-apa jika sedang loading
+
+                // Ambil jawaban terakhir dari layar
+                const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
+                const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]
+                    ?.jawaban || null);
+                const isRagu = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
+
+                // Simpan dulu jawaban terakhir, baru buka modal
+                simpanJawaban(jawaban, isRagu, function() {
+                    // Kode ini akan berjalan SETELAH jawaban terakhir berhasil disimpan
+                    const jawabanTerkumpul = Object.values(jawabanPeserta).filter(j => j && j
+                        .jawaban).length;
+                    document.getElementById('jawabanTerkumpul').textContent = jawabanTerkumpul;
+                    document.getElementById('totalSoalModal').textContent = totalSoal;
+                    konfirmasiModal.show();
+                });
             });
-        }
 
-        function updateStatusPenyelesaian() {
-            const jawabanTersimpan = Object.values(jawabanPeserta).filter(j => j && j.jawaban).length;
-            btnSelesaikan.disabled = jawabanTersimpan !== totalSoal;
-        }
+            document.getElementById('btnSubmitFinal').addEventListener('click', () => document.getElementById(
+                'ujianForm').submit());
 
-        window.navigasi = function(arah) {
-            if (isLoading) return;
-            const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
-            const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]?.jawaban || null);
-            const isRagu = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
-
-            simpanJawaban(jawaban, isRagu, function() {
-                // ==========================================================
-                //           PERBAIKAN UTAMA ADA DI BARIS INI
-                // ==========================================================
-                // Menggunakan parseInt() untuk memastikan penjumlahan matematika
-                const nomorBerikutnya = parseInt(soalSaatIni.nomor) + arah;
-                // ==========================================================
-
-                if (nomorBerikutnya > 0 && nomorBerikutnya <= totalSoal) {
-                    muatSoal(nomorBerikutnya);
-                } else if (nomorBerikutnya > totalSoal) {
-                    btnSelesaikan.click();
+            const timerInterval = setInterval(() => {
+                if (sisaWaktu < 0) {
+                    clearInterval(timerInterval);
+                    alert('Waktu ujian telah habis! Jawaban Anda akan dikirim secara otomatis.');
+                    document.getElementById('ujianForm').submit();
+                    return;
                 }
-            });
-        };
+                const minutes = Math.floor(sisaWaktu / 60);
+                let seconds = Math.floor(sisaWaktu % 60);
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+                sisaWaktu--;
+            }, 1000);
 
-        window.tandaiRagu = function() {
-            if (isLoading) return;
-            const jawabanTerpilih = document.querySelector('input[name="jawaban"]:checked');
-            const jawaban = jawabanTerpilih ? jawabanTerpilih.value : (jawabanPeserta[soalSaatIni.id]?.jawaban || null);
-            const isRaguSaatIni = jawabanPeserta[soalSaatIni.id]?.is_ragu || false;
-            simpanJawaban(jawaban, !isRaguSaatIni, () => muatSoal(soalSaatIni.nomor));
-        };
-
-        btnSelesaikan.addEventListener('click', function() {
-            const jawabanTerkumpul = Object.values(jawabanPeserta).filter(j => j.jawaban).length;
-            document.getElementById('jawabanTerkumpul').textContent = jawabanTerkumpul;
-            document.getElementById('totalSoalModal').textContent = totalSoal;
-            konfirmasiModal.show();
+            history.pushState(null, null, location.href);
+            window.onpopstate = () => history.go(1);
+            muatSoal({{ $nomorSoal }});
         });
-
-        document.getElementById('btnSubmitFinal').addEventListener('click', () => document.getElementById('ujianForm').submit());
-
-        const timerInterval = setInterval(() => {
-            if (sisaWaktu < 0) {
-                clearInterval(timerInterval);
-                alert('Waktu ujian telah habis! Jawaban Anda akan dikirim secara otomatis.');
-                document.getElementById('ujianForm').submit();
-                return;
-            }
-            const minutes = Math.floor(sisaWaktu / 60);
-            let seconds = Math.floor(sisaWaktu % 60);
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            timerDisplay.textContent = `${minutes}:${seconds}`;
-            sisaWaktu--;
-        }, 1000);
-
-        history.pushState(null, null, location.href);
-        window.onpopstate = () => history.go(1);
-        muatSoal({{ $nomorSoal }});
-    });
     </script>
 
 </body>
