@@ -54,8 +54,8 @@
                             <span class="fw-semibold">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <!-- <li><a class="dropdown-item" href="#">Profil</a></li>
+                            <li><hr class="dropdown-divider"></li> -->
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

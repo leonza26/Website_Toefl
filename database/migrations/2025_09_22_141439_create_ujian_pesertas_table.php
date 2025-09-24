@@ -21,7 +21,7 @@ return new class extends Migration
 
             // Mencatat waktu mulai dan selesai
             $table->timestamp('waktu_mulai');
-            $table->timestamp('waktu_selesai');
+            $table->timestamp('waktu_selesai')->nullable();
 
             // Status ujian peserta
             $table->enum('status', ['berlangsung', 'selesai'])->default('berlangsung');

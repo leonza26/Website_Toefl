@@ -30,7 +30,7 @@
                                 <td>{{ $materi->jenis_bahasa }}</td>
                                 <td class="text-center">{{ $materi->jenis_materi }}</td>
                                 <td class="text-center">
-                                    <a href="{{ asset('storage/' . $materi->materi)  }}" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
+                                    <a href="{{ asset('storage/' . $materi->materi)  }}" target="_blank" class="btn btn-sm btn-info text-white" title="Lihat Bank Soal"><i class="bi bi-eye-fill"></i> Lihat Materi</a>
                                 </td>
                             </tr>
                             @empty

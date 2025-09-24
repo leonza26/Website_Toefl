@@ -105,7 +105,7 @@ class AdminMainController extends Controller
 
         $materi->delete();
 
-        return redirect()->routwhate('admin.materi')->with('success', 'Materi berhasil dihapus!');
+        return redirect()->route('admin.materi')->with('success', 'Materi berhasil dihapus!');
     }
 
     // bank soal
