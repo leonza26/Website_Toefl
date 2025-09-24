@@ -4,10 +4,13 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BankSoal;
+use App\Models\EventUjian;
 use App\Models\Materi;
 use App\Models\Soal;
+use App\Models\UjianPeserta;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class AdminMainController extends Controller
@@ -17,8 +20,15 @@ class AdminMainController extends Controller
     {
         $mahasiswa = User::where('role', 1)->count();
         $bank_soal = BankSoal::count();
+        $testAktif = EventUjian::where('status', 'aktif')->count();
 
-        return view('admin.admin', compact('mahasiswa', 'bank_soal'));
+        $today = Carbon::today()->toDateString();
+
+        $aktifitas = UjianPeserta::with('user')
+            ->whereDate('created_at', $today)
+            ->get();
+
+        return view('admin.admin', compact('mahasiswa', 'bank_soal', 'testAktif', 'aktifitas'));
     }
 
     // manage user
@@ -247,6 +257,10 @@ class AdminMainController extends Controller
     public function hapussoal($id)
     {
         $soal = Soal::findOrFail($id);
+        
+        if ($soal->file && Storage::disk('public')->exists($soal->file)) {
+            Storage::disk('public')->delete($soal->file);
+        }
 
         $soal->delete();
 

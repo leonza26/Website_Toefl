@@ -22,11 +22,14 @@
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h5 class="card-title fw-semibold">Skor Terakhir Anda</h5>
-                <p class="display-4 fw-semibold text-primary">550</p>
-                <p class="text-muted small mb-0">Diambil pada: 10 September 2025</p>
+                @if($lastUjian)
+                <p class="display-4 fw-semibold text-primary">{{ $lastUjian->skor }}</p>
+                <p class="text-muted small mb-0">Diambil pada: {{ $lastUjian->created_at->format('d M Y') }}</p>
+                @else
+                <p class="text-primary fw-semibold text-uppercase">Silahkan Mulai Ujian Terlebih Dahulu</p>
+                @endif
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none">Lihat Detail Skor <i class="bi bi-chevron-right"></i></a>
             </div>
         </div>
     </div>
@@ -37,13 +40,14 @@
             <div class="card-body">
                 <h5 class="card-title fw-semibold">Jadwal Tes Tersedia</h5>
                 <ul class="list-unstyled mt-3">
-                    <li class="mb-2"><i class="bi bi-calendar-check text-success me-2"></i>Tes Penempatan #1: 15 Sep 2025</li>
-                    <li class="mb-2"><i class="bi bi-calendar-check text-success me-2"></i>Tes Simulasi #5: 20 Sep 2025</li>
-                    <li class="mb-2"><i class="bi bi-calendar-x text-muted me-2"></i>Tes Yudisium: Pendaftaran Ditutup</li>
+                    @forelse($jadwal as $test)
+                    <li class="mb-2"><i class="bi bi-calendar-check text-success me-2"></i>{{ $test->judul }}: {{ \Carbon\Carbon::parse($test->tanggal)->translatedFormat('d F Y') }}</li>
+                    @empty
+                    @endforelse
                 </ul>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none">Lihat Semua Jadwal <i class="bi bi-chevron-right"></i></a>
+                <!-- <a href="#" class="text-decoration-none">Lihat Semua Jadwal <i class="bi bi-chevron-right"></i></a> -->
             </div>
         </div>
     </div>

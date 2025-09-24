@@ -36,7 +36,7 @@
                 <div class="fs-2 text-warning me-3"><i class="bi bi-play-circle-fill"></i></div>
                 <div>
                     <h5 class="card-title fw-semibold mb-0">Tes Aktif</h5>
-                    <p class="fs-4 fw-semibold mb-0">15</p>
+                    <p class="fs-4 fw-semibold mb-0">{{ $testAktif }}</p>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
             <div class="card-header bg-white border-0 pt-3">
                 <h5 class="card-title fw-semibold mb-0">Aktivitas Terbaru</h5>
             </div>
-            <div class="card-body"> 
+            <div class="card-body">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -72,24 +72,31 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($aktifitas as $peserta)
                         <tr>
-                            <td>Andini Putri</td>
-                            <td>Menyelesaikan Tes Simulasi #5</td>
-                            <td><span class="badge bg-success-subtle text-success-emphasis">580</span></td>
+                            <td>{{ $peserta->user->name }}</td>
+                            <td> @if($peserta->status === 'berlangsung')
+                                {{ strtoupper('Sedang Berlangsung') }}
+                                @elseif($peserta->status === 'selesai')
+                                {{ strtoupper('Sudah Selesai') }}
+                                @else
+                                {{ strtoupper($peserta->status) }}
+                                @endif
+                            </td>
+                            <td><span class="badge {{ $peserta->score < 12 
+                                ? 'bg-warning-subtle text-warning-emphasis' 
+                                : 'bg-success-subtle text-success-emphasis' }}">
+                                    {{ $peserta->skor }}/15
+                                </span></td>
                             <td>5 menit yang lalu</td>
                         </tr>
+                        @empty
                         <tr>
-                            <td>Bagas Prasetyo</td>
-                            <td>Mendaftar untuk Tes Penempatan</td>
-                            <td>-</td>
-                            <td>15 menit yang lalu</td>
+                            <td colspan="4" class="text-center text-muted">
+                                Belum Ada Peserta
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Rizky Maulana</td>
-                            <td>Menyelesaikan Tes Reading Practice</td>
-                            <td><span class="badge bg-warning-subtle text-warning-emphasis">78/100</span></td>
-                            <td>1 jam yang lalu</td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
