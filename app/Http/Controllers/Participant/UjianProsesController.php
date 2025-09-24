@@ -105,22 +105,31 @@
             $jawabanPesertas = JawabanPeserta::where('ujian_peserta_id', $ujianPeserta->id)->pluck('jawaban', 'soal_id');
             $kunciJawaban = $ujianPeserta->eventUjian->bankSoal->soals->pluck('jawaban_benar', 'id');
 
-            $skor = 0;
+               // 1. Hitung jumlah jawaban yang benar
+            $jumlahBenar = 0;
             foreach ($kunciJawaban as $soalId => $jawabanBenar) {
-                if (isset($jawabanPesertas[$soalId]) && $jawabanPesertas[$soalId] === $jawabanBenar) {
-                    $skor++;
+                // Menggunakan strtolower untuk perbandingan yang tidak case-sensitive
+                if (isset($jawabanPesertas[$soalId]) && strtolower($jawabanPesertas[$soalId]) === strtolower($jawabanBenar)) {
+                    $jumlahBenar++;
                 }
             }
 
+            // 2. Dapatkan jumlah total soal
+            $totalSoal = count($kunciJawaban);
+
+            // 3. Buat format skor yang diinginkan (contoh: "18/20")
+            $skorString = $jumlahBenar . '/' . $totalSoal;
+
+            // 4. Simpan skor dalam format string dan ubah status ujian
             $ujianPeserta->update([
-                'skor' => $skor,
+                'skor' => $skorString,
                 'status' => 'selesai',
             ]);
 
             $request->session()->forget(['ujian_soal_ids', 'ujian_soal_index']);
 
-            // Buat halaman hasil ujian
-            return redirect()->route('participant')->with('success', "Ujian selesai! Skor Anda: $skor dari " . count($kunciJawaban));
-        }
+            // Menggunakan format skor baru di pesan sukses
+            return redirect()->route('participant')->with('success', "Ujian selesai! Skor Anda: $skorString");
+            }
 
     }

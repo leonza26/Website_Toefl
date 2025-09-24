@@ -19,7 +19,6 @@ return new class extends Migration
             // Menghubungkan ke event ujian yang sedang dikerjakan
             $table->foreignId('event_ujian_id')->constrained()->onDelete('cascade');
 
-            // Mencatat waktu mulai dan selesai
             $table->timestamp('waktu_mulai');
             $table->timestamp('waktu_selesai');
 
@@ -27,7 +26,7 @@ return new class extends Migration
             $table->enum('status', ['berlangsung', 'selesai'])->default('berlangsung');
 
             // menyimpan skor akhir
-            $table->integer('skor')->nullable();
+            $table->string('skor')->nullable();
             $table->timestamps();
         });
     }
