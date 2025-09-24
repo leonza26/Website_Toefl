@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('event_ujian_id')->constrained()->onDelete('cascade');
 
             $table->timestamp('waktu_mulai');
-            $table->timestamp('waktu_selesai');
+            $table->timestamp('waktu_selesai')->nullable();
 
             // Status ujian peserta
             $table->enum('status', ['berlangsung', 'selesai'])->default('berlangsung');

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Participant;
 
 use App\Models\Soal;
@@ -15,7 +16,15 @@ class ParticipantMainController extends Controller
     //
     public function index()
     {
-        return view('participant.dashboard');
+        $lastUjian = UjianPeserta::where('user_id', Auth::id())
+            ->latest()
+            ->first();
+
+        $jadwal = EventUjian::whereDate('tanggal_ujian', '>=', Carbon::today())
+            ->orderBy('tanggal_ujian', 'asc')
+            ->get();
+
+        return view('participant.dashboard', compact('lastUjian','jadwal'));
     }
 
     public function materi()
