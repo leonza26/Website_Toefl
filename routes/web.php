@@ -51,10 +51,10 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::put('/updatesoal/{id}', 'updatesoal')->name('admin.updatesoal');
             Route::delete('/hapussoal/{id}', 'hapussoal')->name('admin.hapussoal');
 
-
-
             // hasil tes
             Route::get('/hasiltes', 'hasiltes')->name('admin.hasiltes');
+            Route::delete('/hapus_hasiltes/{ujianPeserta}', 'destroy')->name('admin.hapustes');
+
         });
 
         Route::controller(EventUjianController::class)->group(function () {

@@ -257,7 +257,7 @@ class AdminMainController extends Controller
     public function hapussoal($id)
     {
         $soal = Soal::findOrFail($id);
-        
+
         if ($soal->file && Storage::disk('public')->exists($soal->file)) {
             Storage::disk('public')->delete($soal->file);
         }
@@ -268,8 +268,36 @@ class AdminMainController extends Controller
     }
 
     // hasil tes
-    public function hasiltes()
+    public function hasiltes(Request $request)
     {
-        return view('admin.hasiltes');
+        $search = $request->input('search');
+
+        $query = UjianPeserta::with(['user', 'eventUjian']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+
+                $q->whereHas('user', function ($userQuery) use ($search) {
+                    $userQuery->where('name', 'like', "%{$search}%");
+                })
+                    ->orWhereHas('eventUjian', function ($eventQuery) use ($search) {
+                        $eventQuery->where('judul', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $hasilTes = $query->where('status', 'selesai')->latest()->paginate(10);
+
+        return view('admin.hasiltes', compact('hasilTes', 'search'));
+    }
+
+
+     public function destroy(UjianPeserta $ujianPeserta)
+    {
+        // Hapus data yang ditemukan
+        $ujianPeserta->delete();
+
+        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
+        return back()->with('success', 'Hasil tes berhasil dihapus.');
     }
 }

@@ -67,6 +67,7 @@
                                     @endif
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d M Y') }}</td>
+
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-1">
                                         <button class="btn btn-danger btn-sm"
@@ -76,6 +77,7 @@
                                             data-title="{{ $user->name }}"><i class="bi bi-trash-fill"></i></button>
                                     </div>
                                 </td>
+
                             </tr>
                             @empty
                             <tr>

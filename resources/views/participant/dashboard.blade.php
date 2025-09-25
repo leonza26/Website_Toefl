@@ -18,7 +18,7 @@
 
 <div class="row">
     <!-- Card Skor Terakhir -->
-    <div class="col-md-6 col-lg-4 mb-4">
+    <div class="col-md-6 col-lg-6 mb-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h5 class="card-title fw-semibold">Skor Terakhir Anda</h5>
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Card Jadwal Tes -->
-    <div class="col-md-6 col-lg-4 mb-4">
+    <div class="col-md-6 col-lg-6 mb-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h5 class="card-title fw-semibold">Jadwal Tes Tersedia</h5>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <!-- Card Progress -->
+    {{-- <!-- Card Progress -->
     <div class="col-12 col-lg-4 mb-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
@@ -64,6 +64,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
