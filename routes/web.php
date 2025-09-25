@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             // user control
             Route::get('/dashboard', 'admin')->name('admin');
             Route::get('/manage', 'manageuser')->name('admin.manage');
+            Route::get('/formUser', 'formUser')->name('admin.formUser');
+            Route::post('/userStore', 'userStore')->name('admin.userStore');
             Route::delete('/destroyuser/{id}', 'destroyuser')->name('admin.destroyuser');
 
 

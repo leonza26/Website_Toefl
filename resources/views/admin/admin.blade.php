@@ -79,7 +79,7 @@
                                             <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Sedang
                                                 Berlangsung</span>
                                         @elseif($peserta->status === 'selesai')
-                                            <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Sudah
+                                            <span class="badge bg-success-subtle text-primary-emphasis rounded-pill">Sudah
                                                 Selesai</span>
                                         @else
                                             {{ strtoupper($peserta->status) }}

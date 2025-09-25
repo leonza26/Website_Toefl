@@ -14,7 +14,7 @@
                         <p class="text-muted small mb-0">Kelola semua akun admin dan mahasiswa.</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                        <a href="#" class="btn btn-primary">
+                        <a href="{{ route('admin.formUser') }}" class="btn btn-primary">
                             <i class="bi bi-plus-circle me-2"></i>Tambah User Baru
                         </a>
                     </div>
