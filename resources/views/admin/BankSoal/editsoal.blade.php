@@ -39,6 +39,7 @@
 
                 <div class="card-body">
                     {{-- Input untuk Teks Pertanyaan --}}
+                    @if ($bank_soal->jenis_bahasa == 'English')
                     <div class="mb-4">
                         <label for="question_text" class="form-label fw-semibold">Teks Pertanyaan</label>
                         <textarea
@@ -50,7 +51,7 @@
                             required>{{ old('question_text', $soal->pertanyaan) }}</textarea>
                     </div>
 
-                    @if ($bank_soal->jenis_materi == 'Istimaq' || $bank_soal->jenis_materi == 'Listening')
+                    @if ($bank_soal->jenis_materi == 'Listening')
                     <div class="mb-3">
                         <label class="form-label fw-semibold">File Audio (MP3)</label>
 
@@ -150,6 +151,133 @@
                                 required>
                         </div>
                     </div>
+                    @else
+                    <div class="mb-4">
+                        <label for="question_text" class="form-label fw-semibold">Teks Pertanyaan</label>
+                        <textarea
+                            class="form-control"
+                            id="question_text"
+                            name="pertanyaan"
+                            rows="4"
+                            placeholder="اﻨﻫ ﻝﺍﺆﺴﻟﺍ ﺺﻧ ﻞﺧﺩﺃ..."
+                            dir="rtl"
+                            lang="ar"
+                            required>{{ old('question_text', $soal->pertanyaan) }}</textarea>
+                    </div>
+
+                    @if ($bank_soal->jenis_materi == "Istima'")
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">File Audio (MP3)</label>
+
+                        @if ($soal->file)
+                        <p class="text-muted small">File saat ini:</p>
+                        <audio controls class="mb-2" style="width: 100%;">
+                            <source src="{{ asset('storage/' . $soal->file) }}" type="audio/mpeg">
+                            Browser Anda tidak mendukung pemutar audio.
+                        </audio>
+                        @endif
+
+                        {{-- Input untuk upload baru --}}
+                        <input type="file" class="form-control" name="file" accept="audio/mp3,audio/mpeg">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti file.</small>
+                    </div>
+                    @endif
+
+                    {{-- Input untuk Pilihan Jawaban --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Pilihan Jawaban</label>
+                        <p class="form-text text-muted mt-0">Pilih salah satu opsi sebagai jawaban yang benar dengan mengklik tombol radio di sebelahnya.</p>
+
+                        {{-- Opsi A --}}
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="A"
+                                    placeholder="A ﺔﺑﺎﺟﻹﺍ ﺺﻧ"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'A' ? 'checked' : '' }}
+                                    required>
+                            </div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="a"
+                                placeholder="Teks Jawaban A"
+                                dir="rtl"
+                                lang="ar"
+                                value="{{ old('a', $soal->a) }}"
+                                required>
+                        </div>
+
+                        {{-- Opsi B --}}
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="B"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'B' ? 'checked' : '' }}>
+                            </div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="b"
+                                placeholder="Teks Jawaban B"
+                                dir="rtl"
+                                lang="ar"
+                                placeholder="B ﺔﺑﺎﺟﻹﺍ ﺺﻧ"
+                                value="{{ old('b', $soal->b) }}"
+                                required>
+                        </div>
+
+                        {{-- Opsi C --}}
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="C"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'C' ? 'checked' : '' }}>
+                            </div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="c"
+                                placeholder="Teks Jawaban C"
+                                dir="rtl"
+                                lang="ar"
+                                placeholder="C ﺔﺑﺎﺟﻹﺍ ﺺﻧ"
+                                value="{{ old('c', $soal->c) }}"
+                                required>
+                        </div>
+
+                        {{-- Opsi D --}}
+                        <div class="input-group">
+                            <div class="input-group-text">
+                                <input
+                                    class="form-check-input mt-0"
+                                    type="radio"
+                                    name="jawaban_benar"
+                                    value="D"
+                                    {{ old('jawaban_benar', $soal->jawaban_benar) == 'D' ? 'checked' : '' }}>
+                            </div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="d"
+                                placeholder="Teks Jawaban D"
+                                dir="rtl"
+                                lang="ar"
+                                placeholder="D ﺔﺑﺎﺟﻹﺍ ﺺﻧ"
+                                value="{{ old('d', $soal->d) }}"
+                                required>
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 <div class="card-footer bg-white border-0 text-end py-3">

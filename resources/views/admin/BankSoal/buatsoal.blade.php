@@ -46,7 +46,7 @@
                             dir="rtl" lang="ar" required></textarea>
                     </div>
 
-                    @if ($bank_soal->jenis_materi == 'Istimaq')
+                    @if ($bank_soal->jenis_materi == "Istima'")
                     <div class="mb-3">
                         <label class="form-label fw-semibold">File</label>
                         <input type="file" class="form-control mb-2" name="file">

@@ -31,8 +31,8 @@
                             <option value="Reading">Reading</option>
                             <option value="Listening">Listening</option>
                             <option value="Structure">Structure</option>
-                            <option value="Istimaq">Istimaq</option>
-                            <option value="Qoriah">Qoriah</option>
+                            <option value="Istima'">Istima'</option>
+                            <option value="Qiroah">Qiroah</option>
                             <option value="Qowait">Qowait</option>
                         </select>
                     </div>
